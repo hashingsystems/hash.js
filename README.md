@@ -4,16 +4,19 @@ This is the micropayment service javascript embeddable. Available through a cdn 
 
 ### This is a simple javascript applet
 
-`<script href="//api.hashingsystems.com/mps.js" >
-function Initialize(h,a,s,g,r,p,h){
-return object;
-}
-</script>
-`
+## To run you just
+npm install (tested on 8.2.1 runtime)
+then run this script:
+`./node_modules/.bin/webpack --config webpack.config.js --env.prod`
 
-This would run once when the website loads and do the chrome extension checking and charge the account (if necessary).
+this will create a dist which will be usable through the /demo/index.html
+I've only tested the demo/index through python http server. we do want to have it built into the node script for ease-of-use.
 
-It injects a hedera-micropayment object at the top of the website (hidden) and sends a message to the chrome extension.
+
+The code currently:
+  This would run once when the website loads and do the chrome extension checking and charge the account (if necessary).
+
+It doesn't inject any hedera-micropayment. It simply sends a runtie message to the chrome extension.
 
 ![hedera-micropayment object example](https://cdn-images-1.medium.com/max/2600/1*8VBy6SHrMPli_3ms5AAuRw.png)
 
