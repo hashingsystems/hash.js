@@ -8,21 +8,18 @@
     <h1>Hello Future.</h1>
     <p>This demo provides the basic functionality of the micropayment server for the Hedera Chrome Extension</p>
     <script>
-    (function(w, d, s, o, f, js, fjs) {
-        w['MPS-JS'] = o;
-        w[o] = w[o] || function() {
-            (w[o].q = w[o].q || []).push(arguments) };
-        js = d.createElement(s), fjs = d.getElementsByTagName(s)[0];
-        js.id = o;
-        js.src = f;
-        js.async = 1;
-        fjs.parentNode.insertBefore(js, fjs);
-    }(window, document, 'script', 'mw', '../dist/widget.js'));
+        (function (_h,a,s,h,g,ra,ph) {
+            _h['MPS-JS']=h;_h[h] = _h[h] || function () { (_h[h].q = _h[h].q || []).push(arguments) };
+            ra = a.createElement(s), ph = a.getElementsByTagName(s)[0];
+            ra.id = h; ra.src = g; ra.async = 1; ph.parentNode.insertBefore(ra, ph);
+        }(window, document, 'script', 'mw', '../dist/widget.js'));
+
     mw('init', {
         amount: "7", // amount requested by the website
         account: "0.0.1761", // account id of the "pay to" account
         time: "1", // optional parameter
-        memo: "user id", // optional memo field
+        memo: "user id", // optional memo field,
+        /*paymentserver: "http://localhost:8099/"*/
     });
     </script>
 </body>
