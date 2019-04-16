@@ -16,7 +16,7 @@ I've only tested the demo/index through python http server. we do want to have i
 The code currently:
   This would run once when the website loads and do the chrome extension checking and charge the account (if necessary).
 
-It doesn't inject any hedera-micropayment. It simply sends a runtie message to the chrome extension.
+It doesn't inject any hedera-micropayment. It simply sends a runtime message to the chrome extension.
 
 ![hedera-micropayment object example](https://cdn-images-1.medium.com/max/2600/1*8VBy6SHrMPli_3ms5AAuRw.png)
 
