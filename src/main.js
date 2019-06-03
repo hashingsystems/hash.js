@@ -11,7 +11,7 @@ function app(window) {
     console.log('MPS-JS starting');
     let configurations = {
         paymentserver: "http://localhost:9090",
-        extensionid: 'ligpaondaabclfigagcifobaelemiena',
+        extensionid: "ligpaondaabclfigagcifobaelemiena",
         error: "/no-extension",
         type: "article",
         // this might make a good default id for the content
@@ -19,7 +19,7 @@ function app(window) {
         //redirect:'{ "nonPayingAccount": "/insufficient-amount/", "noAccount": "/account-not-paired/", "homePage": "/" }',
     };
     // all methods that were called till now and stored in queue
-    // needs to be called now 
+    // needs to be called now
     let globalObject = window[window['MPS-JS']];
     let queue = globalObject.q;
     if (queue) {
