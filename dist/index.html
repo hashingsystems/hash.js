@@ -5,23 +5,45 @@
 </head>
 
 <body>
-    <h1>Hello Future.</h1>
-    <p>This demo provides the basic functionality of the micropayment server for the Hedera Chrome Extension</p>
-    <script>
-        (function (_h,a,s,h,g,ra,ph) {
-            _h['MPS-JS']=h;_h[h] = _h[h] || function () { (_h[h].q = _h[h].q || []).push(arguments) };
-            ra = a.createElement(s), ph = a.getElementsByTagName(s)[0];
-            ra.id = h; ra.src = g; ra.async = 1; ph.parentNode.insertBefore(ra, ph);
-        }(window, document, 'script', 'mw', 'widget.js'));
+<div id="messagediv"></div>
+<h3>Hello Future</h3>
+<div>
+    <article id="article-1">
+        <p>This demo provides the basic functionality of the micropayment server for the Hedera Chrome Extension</p>
+        <a href="test.html">View</a>
+    </article>
+</div>
 
-    mw('init', {
-        amount: "0.06", // amount requested by the website
-        account: "0.0.1761", // account id of the "pay to" account
-        time: "1", // optional parameter
-        memo: "user id", // optional memo field,
-        paymentserver: "http://localhost:8099/"
-    });
-    </script>
+<script>
+    (function (_h, a, s, h, g, ra, ph) {
+        _h['MPS-JS'] = h;
+        _h[h] = _h[h] || function () {
+            (_h[h].q = _h[h].q || []).push(arguments)
+        };
+        ra = a.createElement(s),
+            ph = a.getElementsByTagName(s)[0];
+        ra.id = h;
+        ra.src = g;
+        ra.async = 1;
+        console.log(ra);
+        console.log(ph);
+        ph.parentNode.insertBefore(ra, ph);
+    }(window, document, 'script', 'mw', 'widget.js'));
+
+    mw('init',
+        {
+            submissionnode: "0.0.11",
+            recipientlist:'[{ "to": "0.0.1761", "tinybars": "4666667" }]',
+            contentid:'79',
+            type:'article',
+            memo:'1275,79',
+            redirect:'{ "nonPayingAccount": "/insufficient-amount/", "noAccount": "/account-not-paired/", "homePage": "/" }',
+            time: "1559313345", // optional parameter
+            attrID: 'article-1',
+        }
+    );
+
+</script>
 </body>
 
 </html>

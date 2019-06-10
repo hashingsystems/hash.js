@@ -8,8 +8,10 @@
 <div id="messagediv"></div>
 <h3>Hello Future</h3>
 <div>
-    <p id="article-1">This demo provides the basic functionality of the micropayment server for the Hedera Chrome Extension</p>
-    <a href="test.html">View</a>
+    <article id="article-1">
+        <p>This demo provides the basic functionality of the micropayment server for the Hedera Chrome Extension</p>
+        <a href="test.html">View</a>
+    </article>
 </div>
 
 <script>
@@ -30,45 +32,17 @@
 
     mw('init',
         {
-            amount: "0.6", // amount requested by the website
-            account: "0.0.1761", // account id of the "pay to" account
-            time: "1", // optional parameter
-            memo: "user id", // optional memo field,
-            paymentserver: "http://localhost:8099/"
-        }
-    );
-
-    mw('CreateHederaObject',
-        {
-            //amount: "0.6", // amount requested by the website
-            submissionnode: "0.0.1761", // account id of the "pay to" account
-            time: "1559313345", // optional parameter
+            submissionnode: "0.0.11",
+            recipientlist:'[{ "to": "0.0.1761", "tinybars": "4666667" }]',
+            contentid:'79',
             type:'article',
             memo:'1275,79',
-            paymentserver: "http://localhost:9090/",
-            recipientlist:'[{ "to": "0.0.99", "tinybars": "4666667" }]',
-            contentid:'79',
+            redirect:'{ "nonPayingAccount": "/insufficient-amount/", "noAccount": "/account-not-paired/", "homePage": "/" }',
+            time: "1559313345", // optional parameter
             attrID: 'article-1',
-            extensionid: "ligpaondaabclfigagcifobaelemiena",
-            redirect:'{ "nonPayingAccount": "/insufficient-amount/", "noAccount": "/account-not-paired/", "homePage": "/" }'
-            ,
         }
     );
 
-    /*CreateHederaObject({submissionnode: "0.0.1761",
-        amount: "0.6",
-        error: "/no-extension",
-        extensionid: "ligpaondaabclfigagcifobaelemiena",
-        id: "/",
-        memo: "9762",
-        redirect:'{ "nonPayingAccount": "/insufficient-amount/", "noAccount": "/account-not-paired/", "homePage": "/" }',
-        paymentserver: "http://localhost:8099/",
-        time: "1",
-        recipientlist:'[{ "to": "0.0.99", "tinybars": "4666667" }]',
-        type: "article"},
-    function (res) {
-        console.log(res);
-    });*/
 </script>
 </body>
 

@@ -6,16 +6,21 @@ const supportedAPI = ['init','test','createhederaobject']; // enlist all methods
 /**
  The main entry of the application
  */
+const production = false;
+
 function app(window) {
     console.log(ping);
     console.log('MPS-JS starting');
     let configurations = {
-        paymentserver: "http://localhost:9090",
+        paymentserver: production ? "https://mps.hashingsystems.com" : 'http://localhost:9999',
         extensionid: "ligpaondaabclfigagcifobaelemiena",
         error: "/no-extension",
         type: "article",
+        time: Date.now(),
+        redirect:'{ "nonPayingAccount": "/insufficient-amount/", "noAccount": "/account-not-paired/", "homePage": "/"}',
         // this might make a good default id for the content
         id: window.location.pathname,
+        submissionnode: "0.0.11",
         //redirect:'{ "nonPayingAccount": "/insufficient-amount/", "noAccount": "/account-not-paired/", "homePage": "/" }',
     };
     // all methods that were called till now and stored in queue
@@ -28,6 +33,7 @@ function app(window) {
             console.log(queue[i]);
             if (typeof queue[i][0] !=='undefined' && queue[i][0].toLowerCase() == 'init') {
                 configurations = extendObject(configurations, queue[i][1]);
+                createHederaObject(configurations);
                 console.log('MPS-JS started', configurations);
                 checkForExtension(configurations)
             } else{ return apiHandler(queue[i][0], queue[i][1]);}
@@ -126,19 +132,28 @@ function extendObject(a, b) {
 }
 
 
-function createHederaObject(params){
-    let Hederaobject =  document.createElement('hedera-micropayment');
-    for(var i in params){
-        if(params.hasOwnProperty(i) && i!=='attrID'){
-            Hederaobject.setAttribute('data-'+i,params[i]);
+        function createHederaObject(params){
+            let object = ['submissionnode','paymentserver','recipientlist','contentid','type','memo','extensionid','redirect','time'];
+            console.log(object)
+            let Hederaobject =  '<hedera-micropayment '
+            for(var i in object){
+                let node = object[i];
+                if(params.hasOwnProperty(node)){
+                    Hederaobject += "data-"+node +"= '"+ params[node] + "' , " + "\n";
+                }
+            }
+
+            Hederaobject += '></hedera-micropayment>';
+            console.log(Hederaobject);
+
+            var body = document.getElementById(params['attrID']);
+            body.innerHTML += Hederaobject;
+            //console.log((Hederaobject))
+            return Hederaobject;
+            //callback(Hederaobject);
         }
-    }
-    document.getElementById(params['attrID']).before(Hederaobject);
-    //console.log((Hederaobject))
-    return Hederaobject;
-    //callback(Hederaobject);
-}
 
 
 
 app(window);
+
