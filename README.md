@@ -1,8 +1,8 @@
 # mps.js
+
 This is the micropayment service javascript embeddable. Available through a cdn or you can download for your own project here.
 
-
-### This is a simple javascript applet
+### This is a simple javascript applet to aid in the interaction with the Hedera Chrome Extension
 
 ## To run you just
 npm install (tested on 8.2.1 runtime)
@@ -15,13 +15,11 @@ I've only tested the demo/index through python http server. we do want to have i
 
 The code currently:
   This would run once when the website loads and do the chrome extension checking and charge the account (if necessary).
+  It injects a hedera-micropayment and triggers payment through the extension
+  Verification of payment can be done using the mps endpoint through a GET request
+      https://mps.hashingsystems.com/check/{receiver_acount_id}/{memo}
+      
+  You can test your extension's setup by visiting https://mps.hashingsystems.com/
 
-It doesn't inject any hedera-micropayment. It simply sends a runtime message to the chrome extension.
-
-![hedera-micropayment object example](https://cdn-images-1.medium.com/max/2600/1*8VBy6SHrMPli_3ms5AAuRw.png)
-
-Future Plans:
-We will be releasing further iterations of this to include more complex structures. 
-We need to brainstorm them a little.
-Wordpress plugins or React/Angular/Vuejs libraries
+## You can learn more at [api.hashingsystems.com](https://api.hashingsystems.com)
 
