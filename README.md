@@ -14,12 +14,12 @@ I've only tested the demo/index through python http server. we do want to have i
 
 
 The code currently:
-  This would run once when the website loads and do the chrome extension checking and charge the account (if necessary).
-  It injects a hedera-micropayment and triggers payment through the extension
-  Verification of payment can be done using the mps endpoint through a GET request
-      https://mps.hashingsystems.com/check/{receiver_acount_id}/{memo}
+  -This would run once when the website loads and do the chrome extension checking and charge the account (if necessary).
+  -It injects a hedera-micropayment and triggers payment through the extension
+  -Verification of payment can be done using the mps endpoint through a GET request
+      -`https://mps.hashingsystems.com/check/{receiver_acount_id}/{memo}`
       
-  You can test your extension's setup by visiting https://mps.hashingsystems.com/
+  -You can test your extension's setup by visiting https://mps.hashingsystems.com/
 
 ## You can learn more at [api.hashingsystems.com](https://api.hashingsystems.com)
 
