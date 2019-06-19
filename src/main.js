@@ -160,7 +160,8 @@ function createHederaObject(params) {
 }
 
  function checkTransaction(params) {
-    let structure = {url:'',memo_id:'',receiver_id:''};
+    let url = production ? "https://mps.hashingsystems.com" : 'http://localhost:9999';
+    let structure = {baseurl:url,memo_id:'',receiver_id:''};
     for (var key in params)
         if (params.hasOwnProperty(key)) structure[key] = params[key];
 
@@ -170,7 +171,7 @@ function createHederaObject(params) {
             console.log(this.response);
         }
     };
-    xhttp.open("GET", "http://localhost:9999/check/"+structure.receiver_id+"/"+structure.memo_id, true);
+    xhttp.open("GET", url+"/check/"+structure.receiver_id+"/"+structure.memo_id, true);
     xhttp.send();
 }
 
