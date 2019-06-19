@@ -2,7 +2,7 @@ import {
     ping
 } from './services'
 
-const supportedAPI = ['init','test','createhederaobject']; // enlist all methods supported by API (e.g. `mw('event', 'user-login');`)
+const supportedAPI = ['init', 'test', 'createhederaobject', 'checktransaction']; // enlist all methods supported by API (e.g. `mw('event', 'user-login');`)
 /**
  The main entry of the application
  */
@@ -17,7 +17,7 @@ function app(window) {
         error: "/no-extension",
         type: "article",
         time: Date.now(),
-        redirect:'{ "nonPayingAccount": "/insufficient-amount/", "noAccount": "/account-not-paired/", "homePage": "/"}',
+        redirect: '{ "nonPayingAccount": "/insufficient-amount/", "noAccount": "/account-not-paired/", "homePage": "/"}',
         // this might make a good default id for the content
         id: window.location.pathname,
         submissionnode: "0.0.11",
@@ -31,12 +31,15 @@ function app(window) {
         for (var i = 0; i < queue.length; i++) {
             console.log('queue:');
             console.log(queue[i]);
-            if (typeof queue[i][0] !=='undefined' && queue[i][0].toLowerCase() == 'init') {
+            if (typeof queue[i][0] !== 'undefined' && queue[i][0].toLowerCase() == 'init') {
                 configurations = extendObject(configurations, queue[i][1]);
                 createHederaObject(configurations);
                 console.log('MPS-JS started', configurations);
                 checkForExtension(configurations)
-            } else{ return apiHandler(queue[i][0], queue[i][1]);}
+            } else {
+                console.log(queue[i])
+                return apiHandler(queue[i][0], queue[i][1]);
+            }
         }
     }
     // override temporary (until the app loaded) handler
@@ -58,9 +61,9 @@ function checkForExtension(configurations) {
         if (tags.amount === null) return null;
         const EXTENSION_ID = tags.extensionid;
 
-        detect(EXTENSION_ID, function(){
+        detect(EXTENSION_ID, function () {
             redirectToError(tags.error);
-        }, function(response){
+        }, function (response) {
             console.log('detect: user has extension installed');
             recordResponse(response);
         });
@@ -118,6 +121,9 @@ function apiHandler(api, params) {
         case 'createhederaobject':
             return createHederaObject(params);
 
+        case 'checktransaction':
+            return checkTransaction(params);
+
         case 'test':
             return params;
         default:
@@ -132,27 +138,41 @@ function extendObject(a, b) {
 }
 
 
-        function createHederaObject(params){
-            let object = ['submissionnode','paymentserver','recipientlist','contentid','type','memo','extensionid','redirect','time'];
-            console.log(object)
-            let Hederaobject =  '<hedera-micropayment '
-            for(var i in object){
-                let node = object[i];
-                if(params.hasOwnProperty(node)){
-                    Hederaobject += "data-"+node +"= '"+ params[node] + "' , " + "\n";
-                }
-            }
-
-            Hederaobject += '></hedera-micropayment>';
-            console.log(Hederaobject);
-
-            var body = document.getElementById(params['attrID']);
-            body.innerHTML += Hederaobject;
-            //console.log((Hederaobject))
-            return Hederaobject;
-            //callback(Hederaobject);
+function createHederaObject(params) {
+    let object = ['submissionnode', 'paymentserver', 'recipientlist', 'contentid', 'type', 'memo', 'extensionid', 'redirect', 'time'];
+    console.log(object)
+    let Hederaobject = '<hedera-micropayment '
+    for (var i in object) {
+        let node = object[i];
+        if (params.hasOwnProperty(node)) {
+            Hederaobject += "data-" + node + "= '" + params[node] + "' , " + "\n";
         }
+    }
 
+    Hederaobject += '></hedera-micropayment>';
+    console.log(Hederaobject);
+
+    var body = document.getElementById(params['attrID']);
+    body.innerHTML += Hederaobject;
+    //console.log((Hederaobject))
+    return Hederaobject;
+    //callback(Hederaobject);
+}
+
+ function checkTransaction(params) {
+    let structure = {url:'',memo_id:'',receiver_id:''};
+    for (var key in params)
+        if (params.hasOwnProperty(key)) structure[key] = params[key];
+
+    var xhttp = new XMLHttpRequest();
+    xhttp.onreadystatechange = function() {
+        if (this.readyState == 4 && this.status == 200) {
+            console.log(this.response);
+        }
+    };
+    xhttp.open("GET", "http://localhost:9999/check/"+structure.receiver_id+"/"+structure.memo_id, true);
+    xhttp.send();
+}
 
 
 app(window);
