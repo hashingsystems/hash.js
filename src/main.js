@@ -6,7 +6,7 @@ const supportedAPI = ['init', 'test', 'createhederaobject', 'checktransaction'];
 /**
  The main entry of the application
  */
-const production = false;
+const production = true;
 
 function app(window) {
     console.log(ping);
@@ -37,8 +37,7 @@ function app(window) {
                 console.log('MPS-JS started', configurations);
                 checkForExtension(configurations)
             } else {
-                console.log(queue[i])
-                return apiHandler(queue[i][0], queue[i][1]);
+                return apiHandler(queue[i][0], queue[i][1], queue[i][2]);
             }
         }
     }
@@ -90,7 +89,7 @@ function detect(extensionId, notInstalledCallback, installedCallback) {
 
 function recordResponse(res) {
     if (typeof res != 'undefined') {
-        var body = document.getElementById('messagediv');
+        var body = document.getElementsByTagName('body');
         body.innerHTML += '<div style="width:100%;height:5%;opacity:0.3;z-index:100;background:yellow;">' + res + '</div>';
         return true;
     }
@@ -110,7 +109,7 @@ function isChrome() {
 /**
  Method that handles all API calls
  */
-function apiHandler(api, params) {
+function apiHandler(api, params, callback = null) {
     if (!api) throw Error('API method required');
     api = api.toLowerCase();
     if (supportedAPI.indexOf(api) === -1) throw Error(`Method ${api} is not supported`);
@@ -122,7 +121,7 @@ function apiHandler(api, params) {
             return createHederaObject(params);
 
         case 'checktransaction':
-            return checkTransaction(params);
+            return checkTransaction(params, callback);
 
         case 'test':
             return params;
@@ -159,19 +158,23 @@ function createHederaObject(params) {
     //callback(Hederaobject);
 }
 
- function checkTransaction(params) {
+function checkTransaction(params, callback) {
     let url = production ? "https://mps.hashingsystems.com" : 'http://localhost:9999';
-    let structure = {baseurl:url,memo_id:'',receiver_id:''};
+    let structure = {baseurl: url, memo_id: '', receiver_id: ''};
     for (var key in params)
         if (params.hasOwnProperty(key)) structure[key] = params[key];
 
     var xhttp = new XMLHttpRequest();
-    xhttp.onreadystatechange = function() {
-        if (this.readyState == 4 && this.status == 200) {
-            console.log(this.response);
+    xhttp.onreadystatechange = function () {
+        if (this.readyState == 4) {
+            if (this.status == 200) {
+                callback(null, this.response);
+            } else {
+                callback({error: true, data: this.response}, null);
+            }
         }
     };
-    xhttp.open("GET", url+"/check/"+structure.receiver_id+"/"+structure.memo_id, true);
+    xhttp.open("GET", structure.baseurl + "/check/" + structure.receiver_id + "/" + structure.memo_id, true);
     xhttp.send();
 }
 
