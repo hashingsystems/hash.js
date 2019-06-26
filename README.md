@@ -48,7 +48,7 @@ mw('init', {
   -Runs when website loads and do the chrome extension checking and charge the account (if necessary).
   -It injects a hedera-micropayment and triggers payment through the extension
   -Verification of payment can be done using the mps endpoint through a GET request
-      -`https://mps.hashingsystems.com/check/{receiver_acount_id}/{memo}`
+      -`https://mps.hashingsystems.com/memo/{memo_id}`
       
   -You can test your extension's setup by visiting https://mps.hashingsystems.com/
 
