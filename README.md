@@ -1,11 +1,11 @@
 # MPS.js
 MPS.js is a micropayment service javascript embeddable library. You can trigger micropayment transactions using the chrome extension through hosting the widget yourself by compiling it locally or use our cdn’ed widget. 
-* [Upgrade Notes](#Important-Notes-for-Existing-Users)
-* [Installation](#Installation)
-* [API](#API)
-* [Browser](#Browser)
-* [Contributing](#Contributing)
-* [License](#License)
+* [Upgrade Notes](#important-notes-for-existing-users)
+* [Installation](#installation)
+* [API](#api)
+* [Browser](#browser)
+* [Contributing](#contributing)
+* [License](#license)
 
 MPS.js is an Open Source Project, see the Contributing section to find out what this means.
 
@@ -78,7 +78,7 @@ This checks the transaction for a receipt. It uses the memo as an identification
 
 ## API
 * [mw init()](#mw-init-recipientlist-contentid-type-memo-time-attrID) 
-* [mw checkTransaction()](#mw-checkTransaction-memo_id-optional-skip) 
+* [mw checkTransaction()](#mw-checktransaction-memo_id-optional-skip) 
 ***
 ## mw init(recipientlist, contentid, type, memo, time, attrID)
 Initializes a payment through the Chrome extension.
