@@ -23,7 +23,8 @@ In order to make payments from your domain you will also have to set up automati
 ### Web Testing:
 Copy and paste the code below to your website.
 
-'<script> 
+'''
+<script> 
 (function(_h, a, s, h, g, ra, ph) { 
     _h['MPS-JS'] = h;
     _h[h] = _h[h] || function() {
@@ -36,7 +37,8 @@ Copy and paste the code below to your website.
         console.log(ph); 
         ph.parentNode.insertBefore(ra, ph); 
     }(window, document, 'script', 'mw', 'https://api.hashingsystems.com/js/widget.js')); 
-</script>'
+</script>
+'''
 
 First, the code above must be inserted into your html code. You can use our hosted widget.js file or compile it yourself.
 
@@ -49,30 +51,34 @@ This will create a distribution which will be usable through the /demo/index.htm
 Once the code above is implemented, you can go ahead and make transactions, given the user has all the necessary components to interact with our micropayment server. 
 
 ### Make a payment:
-'mw('init', { 
+'''
+mw('init', { 
     submissionnode: "0.0.11", 
     recipientlist: '[{ "to": "0.0.99", "tinybars": "4666667" }]', 
     contentid: '79', 
     type: 'article', 
     memo: '1275,79', 
-    attrID: 'feature-4', });'
+    attrID: 'feature-4', });
+    '''
 
 This initializes a payment through the Chrome extension. Currently there can only be one recipient in recipientlist. Take note of the memo used so you can verify the payment later.
 
 ### Check a Transaction:
-'mw(‘checkTransaction’, { memo_id: ‘1275,70’ }, function(err, data) {
+'''
+mw(‘checkTransaction’, { memo_id: ‘1275,70’ }, function(err, data) {
 	if (err) {
 		console.log(err);
 	} else {
 		console.log(data);
 	}
-});'
+});
+'''
 
 This checks the transaction for a receipt. It uses the memo as an identification method and you can include more than one receipt by adding a variable limit: memo = memo_id. You can query up to 1MB of transactions.
 
 ## API
-* mw init() 
-* mw checkTransaction() 
+* [mw init()](#mw-init(recipientlist,-contentid,-type,-memo,-time,-attrID)) 
+* [mw checkTransaction()](#mw-checkTransaction(memo_id,-optional*-skip)) 
 ***
 ## mw init(recipientlist, contentid, type, memo, time, attrID)
 Initializes a payment through the Chrome extension.
