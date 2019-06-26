@@ -38,18 +38,28 @@
             type:'article',
             memo:'1275,79',
             redirect:'{ "nonPayingAccount": "/insufficient-amount/", "noAccount": "/account-not-paired/", "homePage": "/" }',
-            time: "1559313345", // optional parameter
+            time: Date.now(), // optional parameter
             attrID: 'article-1',
         }
     );
-
-    mw('checkTransaction',{memo_id:1560275659,receiver_id:99},function (err,data) {
-        if(err){
-            console.log(err);
-        }else{
-            console.log(data);
-        }
-    });
+    setTimeout(function () {
+        (function (_h, a, s, h, g, ra, ph) {
+            _h['MPS-JS'] = h;
+            _h[h] = _h[h] || function () {
+                (_h[h].q = _h[h].q || []).push(arguments)
+            };
+            ra = a.createElement(s),
+                ph = a.getElementsByTagName(s)[0];
+            ra.id = h;
+            ra.src = g;
+            ra.async = 1;
+            console.log(ra);
+            console.log(ph);
+            ph.parentNode.insertBefore(ra, ph);
+        }(window, document, 'script', 'mw', 'widget.js'));
+        var memo_id = document.getElementsByTagName('hedera-micropayment')[0].getAttribute('data-memo');
+        mw('checkTransaction',{memo_id:memo_id},{success:'/success/',failure:'/payment-failed/'})
+    },3000);
 
 </script>
 </body>

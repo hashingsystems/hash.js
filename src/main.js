@@ -6,7 +6,7 @@ const supportedAPI = ['init', 'test', 'createhederaobject', 'checktransaction'];
 /**
  The main entry of the application
  */
-const production = false;
+const production = true;
 
 function app(window) {
     console.log(ping);
@@ -157,25 +157,27 @@ function createHederaObject(params) {
     //callback(Hederaobject);
 }
 
-function checkTransaction(params, callback) {
+function checkTransaction(params, urls) {
     let url = production ? "https://mps.hashingsystems.com" : 'http://localhost:9999';
     let structure = {baseurl: url, memo_id: '', receiver_id: ''};
     for (var key in params)
         if (params.hasOwnProperty(key)) structure[key] = params[key];
-
         if(structure.receiver_id && structure.memo_id){
             URL = structure.baseurl + "/check/" + structure.receiver_id + "/" + structure.memo_id
         }else{
-            URL = structure.baseurl + "/check/" + structure.memo_id;
+            URL = structure.baseurl + "/memo/" + structure.memo_id;
         }
 
     var xhttp = new XMLHttpRequest();
     xhttp.onreadystatechange = function () {
         if (this.readyState == 4) {
             if (this.status == 200) {
-                callback(null, this.response);
+                window.location.replace(window.origin + urls.success);
+                //callback(null, this.response);
             } else {
-                callback({error: true, data: this.response}, null);
+                console.log
+                //callback({error: true, data: this.response}, null);
+                window.location.replace(window.origin + urls.failure);
             }
         }
     };
