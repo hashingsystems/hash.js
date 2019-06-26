@@ -53,7 +53,7 @@ function app(window) {
 // return null (hedera-micropayment is not present because this website does not implement hedera-micropayment)
 function checkForExtension(configurations) {
     if (!isChrome()) {
-        redirectToError('isnotChrome');
+        redirectToError('/isnotChrome/');
     } else {
         let tags = configurations;
         // if tags.amount is null or undefined, we should assume that this is a free page and do nothing more
@@ -157,9 +157,15 @@ function createHederaObject(params) {
     //callback(Hederaobject);
 }
 
-function checkTransaction(params, urls) {
+function checkTransaction(params) {
     let url = production ? "https://mps.hashingsystems.com" : 'http://localhost:9999';
-    let structure = {baseurl: url, memo_id: '', receiver_id: ''};
+    let structure = {baseurl: url,
+        memo_id: '',
+        receiver_id: '',
+        success:'/success',
+        failure:'/payment-failed',
+        timeout:3000
+    };
     for (var key in params)
         if (params.hasOwnProperty(key)) structure[key] = params[key];
         if(structure.receiver_id && structure.memo_id){
@@ -168,22 +174,26 @@ function checkTransaction(params, urls) {
             URL = structure.baseurl + "/memo/" + structure.memo_id;
         }
 
+        setTimeout(performRequest(structure),structure.timeout)
+
+}
+
+var performRequest = function (structure){
     var xhttp = new XMLHttpRequest();
     xhttp.onreadystatechange = function () {
         if (this.readyState == 4) {
             if (this.status == 200) {
-                window.location.replace(window.origin + urls.success);
+                window.location.replace(window.origin + structure.success);
                 //callback(null, this.response);
             } else {
-                console.log
                 //callback({error: true, data: this.response}, null);
-                window.location.replace(window.origin + urls.failure);
+                window.location.replace(window.origin + structure.failure);
             }
         }
     };
     xhttp.open("GET", URL, true);
     xhttp.send();
-}
+};
 
 
 app(window);

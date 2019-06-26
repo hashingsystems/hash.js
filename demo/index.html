@@ -42,6 +42,7 @@
             attrID: 'article-1',
         }
     );
+
     setTimeout(function () {
         (function (_h, a, s, h, g, ra, ph) {
             _h['MPS-JS'] = h;
@@ -58,7 +59,7 @@
             ph.parentNode.insertBefore(ra, ph);
         }(window, document, 'script', 'mw', 'widget.js'));
         var memo_id = document.getElementsByTagName('hedera-micropayment')[0].getAttribute('data-memo');
-        mw('checkTransaction',{memo_id:memo_id},{success:'/success/',failure:'/payment-failed/'})
+        mw('checkTransaction',{memo_id:memo_id,success:'/success/',failure:'/payment-failed/',timeout:3000})
     },3000);
 
 </script>
