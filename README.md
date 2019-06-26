@@ -49,6 +49,8 @@ mw('init', {
   -It injects a hedera-micropayment and triggers payment through the extension
   -Verification of payment can be done using the mps endpoint through a GET request
       -`https://mps.hashingsystems.com/memo/{memo_id}`
+      -You can also verify transactions through the function checker
+        -checkTransaction(memo_id, success_route)
       
   -You can test your extension's setup by visiting https://mps.hashingsystems.com/
 
