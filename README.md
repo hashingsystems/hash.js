@@ -10,12 +10,10 @@ MPS.js is an Open Source Project, see the Contributing section to find out what 
 
 
 ## Important Notes for Existing Users
-***
 Look here for any future upgrade notes (version changes, fixes, etc).
 
 
 ## Installation
-***
 ### What do you need to get started?
 Make sure you sign up on portal.hedera.com and download the Hedera Wallet Chrome Extension. Configure it with your own wallet and make sure it’s funded with HBAR.
 
@@ -72,7 +70,6 @@ This initializes a payment through the Chrome extension. Currently there can onl
 This checks the transaction for a receipt. It uses the memo as an identification method and you can include more than one receipt by adding a variable limit: memo = memo_id. You can query up to 1MB of transactions.
 
 ## API
-***
 ..* mw init() 
 ..* mw checkTransaction() 
 ***
