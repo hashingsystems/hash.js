@@ -5,19 +5,18 @@
 </head>
 
 <body>
-<div id="messagediv"></div>
-<h3>Hello Future</h3>
-<div>
-    <article id="article-1">
-        <p>This demo provides the basic functionality of the micropayment server for the Hedera Chrome Extension</p>
-        <a href="test.html">View</a>
-    </article>
-</div>
-
-<script>
-    (function (_h, a, s, h, g, ra, ph) {
+    <div id="messagediv"></div>
+    <h3>Hello Future</h3>
+    <div>
+        <article id="article-1">
+            <p>This demo provides the basic functionality of the micropayment server for the Hedera Chrome Extension</p>
+            <a href="test.html">View</a>
+        </article>
+    </div>
+    <script>
+    (function(_h, a, s, h, g, ra, ph) {
         _h['MPS-JS'] = h;
-        _h[h] = _h[h] || function () {
+        _h[h] = _h[h] || function() {
             (_h[h].q = _h[h].q || []).push(arguments)
         };
         ra = a.createElement(s),
@@ -30,39 +29,26 @@
         ph.parentNode.insertBefore(ra, ph);
     }(window, document, 'script', 'mw', 'widget.js'));
 
-    mw('init',
-        {
-            submissionnode: "0.0.11",
-            recipientlist:'[{ "to": "0.0.1761", "tinybars": "4666667" },{ "to": "0.0.99", "tinybars": "4666667" }]',
-            contentid:'79',
-            type:'article',
-            memo:'1275,79',
-            redirect:'{ "nonPayingAccount": "/insufficient-amount/", "noAccount": "/account-not-paired/", "homePage": "/" }',
-            time: Date.now(), // optional parameter
-            attrID: 'article-1',
-        }
-    );
+    mw('init', {
+        submissionnode: "0.0.11",
+        recipientlist: '[{ "to": "0.0.99", "tinybars": "1666667" }]',
+        contentid: '79',
+        paymentserver: 'https://mps.hashingsystems.com',
+        type: 'article',
+        memo: '1275,79',
+        time: "1559313345", // optional parameter
+        attrID: 'article-1',
+    });
 
-    setTimeout(function () {
-        (function (_h, a, s, h, g, ra, ph) {
-            _h['MPS-JS'] = h;
-            _h[h] = _h[h] || function () {
-                (_h[h].q = _h[h].q || []).push(arguments)
-            };
-            ra = a.createElement(s),
-                ph = a.getElementsByTagName(s)[0];
-            ra.id = h;
-            ra.src = g;
-            ra.async = 1;
-            console.log(ra);
-            console.log(ph);
-            ph.parentNode.insertBefore(ra, ph);
-        }(window, document, 'script', 'mw', 'widget.js'));
-        var memo_id = document.getElementsByTagName('hedera-micropayment')[0].getAttribute('data-memo');
-        mw('checkTransaction',{memo_id:memo_id,success:'/success/',failure:'/payment-failed/',timeout:3000})
-    },3000);
+        mw('checkTransaction', { memo_id: '1275,79' }, function(err, data) {
+            if (err) {
+                console.log(err);
+            } else {
+                console.log(data);
+            }
+        });
 
-</script>
+    </script>
 </body>
 
 </html>
