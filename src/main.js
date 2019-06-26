@@ -6,7 +6,7 @@ const supportedAPI = ['init', 'test', 'createhederaobject', 'checktransaction'];
 /**
  The main entry of the application
  */
-const production = true;
+const production = false;
 
 function app(window) {
     console.log(ping);
@@ -147,7 +147,6 @@ function createHederaObject(params) {
             Hederaobject += "data-" + node + "= '" + params[node] + "' , " + "\n";
         }
     }
-
     Hederaobject += '></hedera-micropayment>';
     console.log(Hederaobject);
 
@@ -164,6 +163,12 @@ function checkTransaction(params, callback) {
     for (var key in params)
         if (params.hasOwnProperty(key)) structure[key] = params[key];
 
+        if(structure.receiver_id && structure.memo_id){
+            URL = structure.baseurl + "/check/" + structure.receiver_id + "/" + structure.memo_id
+        }else{
+            URL = structure.baseurl + "/check/" + structure.memo_id;
+        }
+
     var xhttp = new XMLHttpRequest();
     xhttp.onreadystatechange = function () {
         if (this.readyState == 4) {
@@ -174,7 +179,7 @@ function checkTransaction(params, callback) {
             }
         }
     };
-    xhttp.open("GET", structure.baseurl + "/check/" + structure.receiver_id + "/" + structure.memo_id, true);
+    xhttp.open("GET", URL, true);
     xhttp.send();
 }
 
