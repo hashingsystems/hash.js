@@ -77,8 +77,8 @@ mw(‘checkTransaction’, { memo_id: ‘1275,70’ }, function(err, data) {
 This checks the transaction for a receipt. It uses the memo as an identification method and you can include more than one receipt by adding a variable limit: memo = memo_id. You can query up to 1MB of transactions.
 
 ## API
-* [mw init()](#mw-init-recipientlist,-contentid,-type,-memo,-time,-attrID-) 
-* [mw checkTransaction()](#mw-checkTransaction-memo_id,-optional*-skip-) 
+* [mw init()](#mw-init-recipientlist-contentid-type-memo-time-attrID) 
+* [mw checkTransaction()](#mw-checkTransaction-memo_id-optional-skip) 
 ***
 ## mw init(recipientlist, contentid, type, memo, time, attrID)
 Initializes a payment through the Chrome extension.
