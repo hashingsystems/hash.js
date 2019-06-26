@@ -1,11 +1,11 @@
 # MPS.js
 MPS.js is a micropayment service javascript embeddable library. You can trigger micropayment transactions using the chrome extension through hosting the widget yourself by compiling it locally or use our cdn’ed widget. 
-..* [Upgrade Notes](#Important-Notes-for-Existing-Users)
-..* [Installation](#Installation)
-..* [API](#API)
-..* [Browser](#Browser)
-..* [Contributing](#Contributing)
-..* [License](#License)
+* [Upgrade Notes](#Important-Notes-for-Existing-Users)
+* [Installation](#Installation)
+* [API](#API)
+* [Browser](#Browser)
+* [Contributing](#Contributing)
+* [License](#License)
 MPS.js is an Open Source Project, see the Contributing section to find out what this means.
 
 
@@ -70,8 +70,8 @@ This initializes a payment through the Chrome extension. Currently there can onl
 This checks the transaction for a receipt. It uses the memo as an identification method and you can include more than one receipt by adding a variable limit: memo = memo_id. You can query up to 1MB of transactions.
 
 ## API
-..* mw init() 
-..* mw checkTransaction() 
+* mw init() 
+* mw checkTransaction() 
 ***
 ## mw init(recipientlist, contentid, type, memo, time, attrID)
 Initializes a payment through the Chrome extension.
@@ -79,20 +79,20 @@ Currently you can only have on recipient in the recipientlist.
 Make note of the memo used so you can verify the payment later.
 
 Arguments:
-..* 'recipientlist': the money receiver
-..* 'contentid': ID of the content
-..* 'type': article, download, video, etc (what is being monetized)
-..* 'memo': optional memo field, but to query a transaction you must set one and know it
-..* 'time': optionable field
-..* 'attrID': HTML object that handles where the Hedera micropayment object is going to be inserted
+* 'recipientlist': the money receiver
+* 'contentid': ID of the content
+* 'type': article, download, video, etc (what is being monetized)
+* 'memo': optional memo field, but to query a transaction you must set one and know it
+* 'time': optionable field
+* 'attrID': HTML object that handles where the Hedera micropayment object is going to be inserted
 ***
 ## mw checkTransaction(memo_id, optional* skip)
 Checks transaction for a receipt to verify whether transaction was done.
 You can query up to 1MB of transactions.
 
 Arguments:
-..* 'memo_id': identification method for transaction
-..** To include more than 1 receipt, add a variable limit: memo = memo_id
+* 'memo_id': identification method for transaction
+** To include more than 1 receipt, add a variable limit: memo = memo_id
 
 
 ## Browser
@@ -100,11 +100,9 @@ You can learn more at [api.hashingsystems.com](https://api.hashingsystems.com/)
 
 
 ## Contributing
-
----
+TBA
 
 
 ## License
-
----
+TBA
 
