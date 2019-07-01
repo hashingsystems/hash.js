@@ -93,8 +93,8 @@ Arguments:
 * `time`: optionable field
 * `attrID`: HTML object that handles where the Hedera micropayment object is going to be inserted
 ***
-## mw checkTransaction(memo_id, optional* skip)
-Checks transaction for a receipt to verify whether transaction was done.
+## mw checkTransaction(memo_id, *optional* limit)
+Checks transaction for a receipt to verify whether transaction was done. Use the limit variable to include more than 1 transaction.
 You can query up to 1MB of transactions.
 
 Arguments:
