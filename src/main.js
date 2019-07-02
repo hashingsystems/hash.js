@@ -2,7 +2,7 @@ import {
     ping
 } from './services'
 
-const supportedAPI = ['init', 'test', 'createhederaobject', 'checktransaction']; // enlist all methods supported by API (e.g. `mw('event', 'user-login');`)
+const supportedAPI = ['init', 'test', 'createhederaobject', 'checktransaction','createcontractobject']; // enlist all methods supported by API (e.g. `mw('event', 'user-login');`)
 /**
  The main entry of the application
  */
@@ -21,6 +21,7 @@ function app(window) {
         // this might make a good default id for the content
         id: window.location.pathname,
         submissionnode: "0.0.11",
+        memo:Date.now(),
         //redirect:'{ "nonPayingAccount": "/insufficient-amount/", "noAccount": "/account-not-paired/", "homePage": "/" }',
     };
     // all methods that were called till now and stored in queue
@@ -36,9 +37,14 @@ function app(window) {
                 createHederaObject(configurations);
                 console.log('MPS-JS started', configurations);
                 checkForExtension(configurations)
-            } else {
+            } else if(typeof queue[i][0] !== 'undefined' && queue[i][0].toLowerCase() == 'createcontractobject') {
                 configurations = extendObject(configurations, queue[i][1]);
-                return apiHandler(configurations, queue[i][0], queue[i][1], queue[i][2]);
+                apiHandler(configurations, queue[i][0], queue[i][1], queue[i][2]);
+                checkForExtension(configurations)
+            }else{
+                console.log(queue);
+                configurations = extendObject(configurations, queue[i][1]);
+                apiHandler(configurations, queue[i][0], queue[i][1], queue[i][2]);
             }
         }
     }
@@ -161,14 +167,14 @@ function createHederaObject(params) {
 }
 
 function createContractObject(params) {
-    let __construct = ['contractid', 'maximum', 'paymentserver', 'params', 'memo', 'abi', 'extensionid'];
+    let __construct = ['contractid', 'maximum', 'paymentserver', 'params', 'memo', 'abi','redirect','extensionid'];
     let object = {
         contractid: '0.0.1111',
         maximum: '422342343',
         paymentserver: params.configuration.paymentserver,
         params: ["869", "100000000", "216", "253", "27", "0x226b08976ad0dd982aeb6b21a44f3eacae579569c34e71725aff801a2fe68739", "0x333f991fa3a870575f819569e9f72a771ea790078d448cc8789120ee14abf3c5"],
         memo: 'a4a7c4329aab4b1fac474ff6f93d858c',
-        abi: {
+        abi: JSON.stringify({
             "constant": false,
             "inputs": [{"name": "propertyID", "type": "uint24"}, {"name": "amount", "type": "uint256"}, {
                 "name": "x",
@@ -182,34 +188,36 @@ function createContractObject(params) {
             "payable": true,
             "stateMutability": "payable",
             "type": "function"
-        },
-        redirect: {
+        }),
+        redirect: JSON.stringify({
             "nonPayingAccount": "/insufficient-amount/",
             "noAccount": "/account-not-paired",
             "homePage": "/"
-        },
+        }),
         extensionid: 'niajdeokpngbpgpmaolodhlgobpllajp',
     };
-    let supplied = params.params;
-    console.log(object);
+    let extended = extendObject(object, params.params);
+    console.log(extended);
     let Contractobject = '<hedera-contract ';
     for (var i in __construct) {
         let node = __construct[i];
-        if (supplied.hasOwnProperty(node)) {
-            Contractobject += "data-" + node + "= '" + supplied[node] + "' , " + "\n";
+        if (extended.hasOwnProperty(node)) {
+            Contractobject += "data-" + node + "= '" + extended[node] + "' , " + "\n";
         }
     }
     Contractobject += '></hedera-contract>';
     console.log(Contractobject);
 
-    var body = document.getElementById(params['attrID']);
-    body.innerHTML += Hederaobject;
+    var body = document.getElementById(extended['attrID']);
+    body.innerHTML += Contractobject;
     //console.log((Hederaobject))
     return Contractobject;
     //callback(Hederaobject);
 }
 
 function checkTransaction(params) {
+
+    console.log("in check trans")
     let memo_id = params.configuration.memo;
     let url = production ? "https://mps.hashingsystems.com" : 'http://localhost:9999';
     let structure = {
@@ -218,7 +226,8 @@ function checkTransaction(params) {
         receiver_id: '',
         success: '/success',
         failure: '/payment-failed',
-        timeout: 3000
+        timeout: 3000,
+        limit:1
     };
 
     for (var key in params.params) {
@@ -230,7 +239,7 @@ function checkTransaction(params) {
     if (structure.receiver_id && structure.memo_id) {
         URL = structure.baseurl + "/check/" + structure.receiver_id + "/" + structure.memo_id
     } else {
-        URL = structure.baseurl + "/memo/" + structure.memo_id;
+        URL = structure.baseurl + "/memo/" + structure.memo_id+'?limit='+structure.limit;
     }
     console.log(structure.timeout);
     //setTimeout(performRequest(structure), structure.timeout)
@@ -252,9 +261,9 @@ var performRequest = function (structure) {
                         window.origin + structure.success,
                         '_blank'
                     );*/
-                    window.location.replace(window.origin + structure.success);
+                    //window.location.replace(window.origin + structure.success);
                 } else {
-                    window.location.replace(window.origin + structure.failure);
+                    //window.location.replace(window.origin + structure.failure);
                 }
                 //window.location.replace(window.origin + structure.success);
                 //callback(null, this.response);

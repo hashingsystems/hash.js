@@ -12,9 +12,12 @@
         <p>This demo provides the basic functionality of the micropayment server for the Hedera Chrome Extension</p>
         <a href="test.html">View</a>
     </article>
-</div>
 
+    <article id="article-2">
+    </article>
+</div>
 <script>
+    // this is the library initializing. You can compile your own version of widget.js or use the one provided by us through api.hashingsystems.com/js/widget.js
     (function (_h, a, s, h, g, ra, ph) {
         _h['MPS-JS'] = h;
         _h[h] = _h[h] || function () {
@@ -30,42 +33,32 @@
         ph.parentNode.insertBefore(ra, ph);
     }(window, document, 'script', 'mw', 'widget.js'));
 
-    mw('init',
-        {
-            submissionnode: "0.0.11",
-            recipientlist:'[{ "to": "0.0.7941, "tinybars": "4666667" }]',
-            contentid:'79',
-            type:'article',
-            memo:Date.now(),
-            redirect:'{ "nonPayingAccount": "/insufficient-amount/", "noAccount": "/account-not-paired/", "homePage": "/" }',
-            time: Date.now(), // optional parameter
-            attrID: 'article-1',
-        }
-    );
+    // this initializes a payment through the chrome extension.
+    // Currently you can only have one recipient in the recipientlist
+    // make a note of the memo you use so you can verify the payment later
 
-    mw('checkTransaction',{success:'/success/',failure:'/payment-failed/',timeout:3000});
-    mw('createContractObject',{
-
+    mw('init', {
+        recipientlist: '[{ "to": "0.0.99", "tinybars": "1666667" }]',
+        contentid: '79',
+        type: 'article',
+        memo: '1275,79',
+        time: "1559313345", // optional parameter
+        attrID: 'article-1',
     });
 
-    /*setTimeout(function () {
-        (function (_h, a, s, h, g, ra, ph) {
-            _h['MPS-JS'] = h;
-            _h[h] = _h[h] || function () {
-                (_h[h].q = _h[h].q || []).push(arguments)
-            };
-            ra = a.createElement(s),
-                ph = a.getElementsByTagName(s)[0];
-            ra.id = h;
-            ra.src = g;
-            ra.async = 1;
-            console.log(ra);
-            console.log(ph);
-            ph.parentNode.insertBefore(ra, ph);
-        }(window, document, 'script', 'mw', 'widget.js'));
-        var memo_id = document.getElementsByTagName('hedera-micropayment')[0].getAttribute('data-memo');
-        mw('checkTransaction',{memo_id:memo_id,success:'/success/',failure:'/payment-failed/',timeout:3000})
-    },3000);*/
+
+    mw('createContractObject', {
+        contractid:"0.0.1111",
+        maximum:"422342343",
+        attrID: 'article-2'
+    });
+
+
+    // check transaction for a receipt.
+    // use the memo as an identification method
+    // add variable limit to include more than 1 receipt with memo= memo_id.
+    // You can query up to 1MB of transactions.
+    mw('checkTransaction', {success: '/success/', failure: '/payment-failed/',memo:'1275,79', timeout: 3000,limit:5});
 
 </script>
 </body>
