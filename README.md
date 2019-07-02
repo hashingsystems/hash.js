@@ -1,58 +1,115 @@
-# mps.js
+# MPS.js
+MPS.js is a micropayment service javascript embeddable library. You can trigger micropayment transactions using the chrome extension through hosting the widget yourself by compiling it locally or use our cdn’ed widget. 
+* [Upgrade Notes](#important-notes-for-existing-users)
+* [Installation](#installation)
+* [API](#api)
+* [Browser](#browser)
+* [Contributing](#contributing)
+* [License](#license)
 
-This is the micropayment service javascript embeddable. Available through a cdn or you can download for your own project here.
+MPS.js is an Open Source Project, see the Contributing section to find out what this means.
 
-### This is a simple javascript applet to aid in the interaction with the Hedera Chrome Extension
 
-## Local Testing
-npm install (tested on 8.2.1 runtime)
-then run this script:
-`./node_modules/.bin/webpack --config webpack.config.js --env.prod`
+## Important Notes for Existing Users
+Look here for any future upgrade notes (version changes, fixes, etc).
 
-this will create a dist which will be usable through the /demo/index.html
-I've only tested the demo/index through python http server. we do want to have it built into the node script for ease-of-use.
 
-## Web Testing
+## Installation
+### What do you need to get started?
+Make sure you sign up on portal.hedera.com and download the Hedera Wallet Chrome Extension. Configure it with your own wallet and make sure it’s funded with HBAR.
 
-Copy and paste this to your website 
+In order to make payments from your domain you will also have to set up automatic payment values or you will get an “insufficient-amount” error.
 
-`
-<script>
-(function(_h, a, s, h, g, ra, ph) {
+### Web Testing:
+Copy and paste the code below to your website.
+
+```
+<script> 
+(function(_h, a, s, h, g, ra, ph) { 
     _h['MPS-JS'] = h;
     _h[h] = _h[h] || function() {
-        (_h[h].q = _h[h].q || []).push(arguments)
-    };
-    ra = a.createElement(s),
-        ph = a.getElementsByTagName(s)[0];
-    ra.id = h;
-    ra.src = g;
-    ra.async = 1;
-    console.log(ra);
-    console.log(ph);
-    ph.parentNode.insertBefore(ra, ph);
-}(window, document, 'script', 'mw', 'https://api.hashingsystems.com/js/widget.js'));
-
-mw('init', {
-    submissionnode: "0.0.11",
-    recipientlist: '[{ "to": "0.0.99", "tinybars": "4666667" }]',
-    contentid: '79',
-    type: 'article',
-    memo: '1275,79',
-    attrID: 'feature-4',
-});
+        (_h[h].q = _h[h].q || []).push(arguments) }; ra = a.createElement(s), 
+            ph = a.getElementsByTagName(s)[0]; 
+        ra.id = h; 
+        ra.src = g; 
+        ra.async = 1; 
+        console.log(ra); 
+        console.log(ph); 
+        ph.parentNode.insertBefore(ra, ph); 
+    }(window, document, 'script', 'mw', 'https://api.hashingsystems.com/js/widget.js')); 
 </script>
-`
+```
 
-## Code Status
-  -Runs when website loads and do the chrome extension checking and charge the account (if necessary).
-  -It injects a hedera-micropayment and triggers payment through the extension
-  -Verification of payment can be done using the mps endpoint through a GET request
-      -`https://mps.hashingsystems.com/memo/{memo_id}`
-      -You can also verify transactions through the function checker
-        -checkTransaction(memo_id, success_route)
-      
-  -You can test your extension's setup by visiting https://mps.hashingsystems.com/
+First, the code above must be inserted into your html code. You can use our hosted widget.js file or compile it yourself.
 
-## You can learn more at [api.hashingsystems.com](https://api.hashingsystems.com)
+### How To Compile It Yourself:
+
+`npm install` (tested on 8.2.1 runtime) then run this script: 
+`./node_modules/.bin/webpack --config webpack.config.js --env.prod`
+This will create a distribution which will be usable through the /demo/index.html which has been only tested the demo/index through the python http server. 
+
+Once the code above is implemented, you can go ahead and make transactions, given the user has all the necessary components to interact with our micropayment server. 
+
+### Make a payment:
+```
+mw('init', { 
+    submissionnode: "0.0.11", 
+    recipientlist: '[{ "to": "0.0.99", "tinybars": "4666667" }]', 
+    contentid: '79', 
+    type: 'article', 
+    memo: '1275,79', 
+    attrID: 'feature-4', });
+```
+
+This initializes a payment through the Chrome extension. Currently there can only be one recipient in recipientlist. Take note of the memo used so you can verify the payment later.
+
+### Check a Transaction:
+```
+mw(‘checkTransaction’, { memo_id: ‘1275,70’ }, function(err, data) {
+	if (err) {
+		console.log(err);
+	} else {
+		console.log(data);
+	}
+});
+```
+
+This checks the transaction for a receipt. It uses the memo as an identification method and you can include more than one receipt by adding a variable limit: memo = memo_id. You can query up to 1MB of transactions.
+
+## API
+* mw init()
+* mw checkTransaction() 
+***
+## mw init(recipientlist, contentid, type, memo, time, attrID)
+Initializes a payment through the Chrome extension.
+Currently you can only have on recipient in the recipientlist.
+Make note of the memo used so you can verify the payment later.
+
+Arguments:
+* `recipientlist`: the money receiver
+* `contentid`: ID of the content
+* `type`: article, download, video, etc (what is being monetized)
+* `memo`: optional memo field, but to query a transaction you must set one and know it
+* `time`: optionable field
+* `attrID`: HTML object that handles where the Hedera micropayment object is going to be inserted
+***
+## mw checkTransaction(memo_id, *optional* limit)
+Checks transaction for a receipt to verify whether transaction was done. Use the limit variable to include more than 1 transaction.
+You can query up to 1MB of transactions.
+
+Arguments:
+* `memo_id`: identification method for transaction
+ * To include more than 1 receipt, add a variable limit: memo = memo_id
+
+
+## Browser
+You can learn more at [api.hashingsystems.com](https://api.hashingsystems.com/)
+
+
+## Contributing
+TBA
+
+
+## License
+TBA
 
