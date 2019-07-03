@@ -93,8 +93,12 @@ Arguments:
 * `time`: optionable field
 * `attrID`: HTML object that handles where the Hedera micropayment object is going to be inserted
 ***
-## mw checkTransaction(memo_id, *optional* limit)
-Checks transaction for a receipt to verify whether transaction was done. Use the limit variable to include more than 1 transaction.
+## mw checkTransaction(memo, *optional* receiver_id, *optional* limit, *optional* timeout)
+Checks transaction for a receipt to verify whether transaction was done. This only works for transactions sent via the Hashing Systems micropayment server.
+Memo: Query by matching the memo used in the generation of the transaction.
+Limit: Integer. It allows you to get more than one transaction with memo
+Receiver_id: Account Id where the money was sent
+Timeout: this is how long the function should wait to be called (in case the library should do that for you)
 You can query up to 1MB of transactions.
 
 Arguments:
