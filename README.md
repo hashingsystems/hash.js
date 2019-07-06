@@ -115,5 +115,5 @@ TBA
 
 
 ## License
-TBA
+See LICENSE for details. Hashing Systems © 2019
 
