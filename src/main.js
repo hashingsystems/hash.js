@@ -261,7 +261,7 @@ var performRequest = function (structure) {
                         window.origin + structure.success,
                         '_blank'
                     );*/
-                    //window.location.replace(window.origin + structure.success);
+                    window.location.replace(window.origin + structure.success);
                 } else {
                     //window.location.replace(window.origin + structure.failure);
                 }
