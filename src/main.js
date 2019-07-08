@@ -263,7 +263,7 @@ var performRequest = function (structure) {
                     );*/
                     window.location.replace(window.origin + structure.success);
                 } else {
-                    //window.location.replace(window.origin + structure.failure);
+                    window.location.replace(window.origin + structure.failure);
                 }
                 //window.location.replace(window.origin + structure.success);
                 //callback(null, this.response);
