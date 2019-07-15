@@ -103,7 +103,11 @@ You can query up to 1MB of transactions.
 
 Arguments:
 * `memo_id`: identification method for transaction
- * To include more than 1 receipt, add a variable limit: memo = memo_id
+ * To include more than 1 receipt, add a variable "limit" (ex: limit: 10) 
+ memo = memo_id
+ 
+ You can view an example return here:
+ [mps.hashingsystems.com/memo/1561661493370?limit=5](https://mps.hashingsystems.com/memo/1561661493370?limit=5)
 
 
 ## Browser
