@@ -46,19 +46,11 @@
         attrID: 'article-1',
     });
 
-
-    mw('createContractObject', {
-        contractid:"0.0.1111",
-        maximum:"422342343",
-        attrID: 'article-2'
-    });
-
-
     // check transaction for a receipt.
     // use the memo as an identification method
     // add variable limit to include more than 1 receipt with memo= memo_id.
     // You can query up to 1MB of transactions.
-    mw('checkTransaction', {success: '/success/', failure: '/payment-failed/',memo:'1275,79', timeout: 3000,limit:5});
+    mw('checkTransaction', {success: '/success/', failure: '/payment-failed/',memo:'1275,79',limit:5});
 
 </script>
 </body>
