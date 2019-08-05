@@ -273,7 +273,7 @@ function readynessCheck(params, callback) {
         'validBrowser': null,
         'extensionInstalled': null,
         'accessToAccounts': null,
-        'accountId': params.submissionnode,
+        'accountId': null,
         'submissionNode': params.submissionnode
     };
     let checkIsChrome = isChrome();
