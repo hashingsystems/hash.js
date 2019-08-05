@@ -244,7 +244,7 @@ var performRequest = function (structure) {
                 let response = JSON.parse(this.response);
                 console.log(response);
                 console.log(response.response.length);
-                if (response.response.length > 5) {
+                if (response.response.length >= 1) {
                     /*window.open(
                         window.origin + structure.success,
                         '_blank'
@@ -297,12 +297,12 @@ function readynessCheck(params, callback) {
                         console.log(ajaxresp);
                         responese.accountId = ajaxresp.response.sender;
                         responese.accountPaired = true;
-                        responese.accountId = true;
+                        responese.accessToAccounts = true;
                         callback(null,responese);
                     } else {
                         responese.accountPaired = false;
-                        responese.accountId = false;
-
+                        responese.accessToAccounts = false;
+                        callback(null,responese);
                     }
                 }
             };
