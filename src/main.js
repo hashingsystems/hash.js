@@ -2,14 +2,13 @@ import {
     ping
 } from './services'
 
-const supportedAPI = ['init', 'test', 'createhederaobject', 'checktransaction','createcontractobject']; // enlist all methods supported by API (e.g. `mw('event', 'user-login');`)
+const supportedAPI = ['init', 'test', 'createhederaobject', 'checktransaction', 'createcontractobject', 'readynesscheck']; // enlist all methods supported by API (e.g. `mw('event', 'user-login');`)
 /**
  The main entry of the application
  */
 const production = true;
 
 function app(window) {
-    console.log(ping);
     console.log('MPS-JS starting');
     let configurations = {
         paymentserver: production ? "https://mps.hashingsystems.com" : 'http://localhost:9999',
@@ -21,7 +20,7 @@ function app(window) {
         // this might make a good default id for the content
         id: window.location.pathname,
         submissionnode: "0.0.11",
-        memo:Date.now(),
+        memo: Date.now(),
         //redirect:'{ "nonPayingAccount": "/insufficient-amount/", "noAccount": "/account-not-paired/", "homePage": "/" }',
     };
     // all methods that were called till now and stored in queue
@@ -30,19 +29,16 @@ function app(window) {
     let queue = globalObject.q;
     if (queue) {
         for (var i = 0; i < queue.length; i++) {
-            console.log('queue:');
-            console.log(queue[i]);
             if (typeof queue[i][0] !== 'undefined' && queue[i][0].toLowerCase() == 'init') {
                 configurations = extendObject(configurations, queue[i][1]);
                 createHederaObject(configurations);
                 console.log('MPS-JS started', configurations);
                 checkForExtension(configurations)
-            } else if(typeof queue[i][0] !== 'undefined' && queue[i][0].toLowerCase() == 'createcontractobject') {
+            } else if (typeof queue[i][0] !== 'undefined' && queue[i][0].toLowerCase() == 'createcontractobject') {
                 configurations = extendObject(configurations, queue[i][1]);
                 apiHandler(configurations, queue[i][0], queue[i][1], queue[i][2]);
                 checkForExtension(configurations)
-            }else{
-                console.log(queue);
+            } else {
                 configurations = extendObject(configurations, queue[i][1]);
                 apiHandler(configurations, queue[i][0], queue[i][1], queue[i][2]);
             }
@@ -54,10 +50,6 @@ function app(window) {
     globalObject.configurations = configurations;
 }
 
-// checkForExtension handles 3 scenarios
-// returns true (hedera-micropayment tag is present and extension is installed)
-// returns false (hedera-micropayment tag is present but extension is NOT installed)
-// return null (hedera-micropayment is not present because this website does not implement hedera-micropayment)
 function checkForExtension(configurations) {
     if (!isChrome()) {
         redirectToError('/isnotChrome');
@@ -133,6 +125,9 @@ function apiHandler(configuration, api, params, callback = null) {
         case 'createcontractobject':
             return createContractObject({configuration, params}, callback);
 
+        case 'readynesscheck':
+            return readynessCheck(configuration, callback);
+
         case 'test':
             return params;
         default:
@@ -148,7 +143,6 @@ function extendObject(a, b) {
 
 function createHederaObject(params) {
     let object = ['submissionnode', 'paymentserver', 'recipientlist', 'contentid', 'type', 'memo', 'extensionid', 'redirect', 'time'];
-    console.log(object);
     let Hederaobject = '<hedera-micropayment ';
     for (var i in object) {
         let node = object[i];
@@ -157,17 +151,13 @@ function createHederaObject(params) {
         }
     }
     Hederaobject += '></hedera-micropayment>';
-    console.log(Hederaobject);
-
     var body = document.getElementById(params['attrID']);
     body.innerHTML += Hederaobject;
-    //console.log((Hederaobject))
     return Hederaobject;
-    //callback(Hederaobject);
 }
 
 function createContractObject(params) {
-    let __construct = ['contractid', 'maximum', 'paymentserver', 'params', 'memo', 'abi','redirect','extensionid'];
+    let __construct = ['contractid', 'maximum', 'paymentserver', 'params', 'memo', 'abi', 'redirect', 'extensionid'];
     let object = {
         contractid: '0.0.1111',
         maximum: '422342343',
@@ -189,20 +179,18 @@ function createContractObject(params) {
             "stateMutability": "payable",
             "type": "function"
         }),
-        redirect: JSON.stringify({
-            "nonPayingAccount": "/insufficient-amount/",
-            "noAccount": "/account-not-paired",
-            "homePage": "/"
-        }),
-        extensionid: 'niajdeokpngbpgpmaolodhlgobpllajp',
+        redirect: '{"nonPayingAccount": "/insufficient-amount/","noAccount": "/account-not-paired","homePage": "/"}',
+        extensionid: 'pdjjpcolgmmcifijpejkenpbbimedpic',
     };
+
+    console.log(JSON.parse(object.abi));
     let extended = extendObject(object, params.params);
     console.log(extended);
     let Contractobject = '<hedera-contract ';
     for (var i in __construct) {
         let node = __construct[i];
         if (extended.hasOwnProperty(node)) {
-            Contractobject += "data-" + node + "= '" + extended[node] + "' , " + "\n";
+            Contractobject += "data-" + node + "= '" + extended[node] + "' ";
         }
     }
     Contractobject += '></hedera-contract>';
@@ -217,7 +205,6 @@ function createContractObject(params) {
 
 function checkTransaction(params) {
 
-    console.log("in check trans")
     let memo_id = params.configuration.memo;
     let url = production ? "https://mps.hashingsystems.com" : 'http://localhost:9999';
     let structure = {
@@ -227,7 +214,7 @@ function checkTransaction(params) {
         success: '/success',
         failure: '/payment-failed',
         timeout: 3000,
-        limit:1
+        limit: 1
     };
 
     for (var key in params.params) {
@@ -239,7 +226,7 @@ function checkTransaction(params) {
     if (structure.receiver_id && structure.memo_id) {
         URL = structure.baseurl + "/check/" + structure.receiver_id + "/" + structure.memo_id
     } else {
-        URL = structure.baseurl + "/memo/" + structure.memo_id+'?limit='+structure.limit;
+        URL = structure.baseurl + "/memo/" + structure.memo_id + '?limit=' + structure.limit;
     }
     console.log(structure.timeout);
     //setTimeout(performRequest(structure), structure.timeout)
@@ -256,7 +243,8 @@ var performRequest = function (structure) {
             if (this.status == 200) {
                 let response = JSON.parse(this.response);
                 console.log(response);
-                if (response.response.length > 0) {
+                console.log(response.response.length);
+                if (response.response.length > 5) {
                     /*window.open(
                         window.origin + structure.success,
                         '_blank'
@@ -276,6 +264,70 @@ var performRequest = function (structure) {
     xhttp.open("GET", URL, true);
     xhttp.send();
 };
+
+function readynessCheck(params, callback) {
+    let responese = {
+        'ischrome': true,
+        'accountPaired': false,
+        'ismobile': null,
+        'validBrowser': null,
+        'extensionInstalled': null,
+        'accessToAccounts': null,
+        'accountId': params.submissionnode,
+        'submissionNode': params.submissionnode
+    };
+    let checkIsChrome = isChrome();
+    responese.ischrome = checkIsChrome;
+    let mob = detectmob();
+    responese.ismobile = mob;
+    detect(params.extensionid, function () {
+        responese.extensionInstalled = false;
+        callback(null,responese);
+    }, function () {
+        responese.extensionInstalled = true;
+        let object = createHederaObject(params);
+        let url = production ? "https://mps.hashingsystems.com" : 'http://localhost:9999';
+        URL = url + "/memo/" + params.memo;
+        setTimeout(function () {
+            var xhttp = new XMLHttpRequest();
+            xhttp.onreadystatechange = function () {
+                if (this.readyState == 4) {
+                    if (this.status == 200) {
+                        let ajaxresp = JSON.parse(this.response);
+                        console.log(ajaxresp);
+                        responese.accountId = ajaxresp.response.sender;
+                        responese.accountPaired = true;
+                        responese.accountId = true;
+                        callback(null,responese);
+                    } else {
+                        responese.accountPaired = false;
+                        responese.accountId = false;
+
+                    }
+                }
+            };
+            xhttp.open("GET", URL, true);
+            xhttp.send();
+        },5000);
+        //callback(null,responese);
+    });
+
+}
+
+function detectmob() {
+    if (navigator.userAgent.match(/Android/i)
+        || navigator.userAgent.match(/webOS/i)
+        || navigator.userAgent.match(/iPhone/i)
+        || navigator.userAgent.match(/iPad/i)
+        || navigator.userAgent.match(/iPod/i)
+        || navigator.userAgent.match(/BlackBerry/i)
+        || navigator.userAgent.match(/Windows Phone/i)
+    ) {
+        return true;
+    } else {
+        return false;
+    }
+}
 
 
 app(window);
