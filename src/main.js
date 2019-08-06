@@ -2,7 +2,7 @@ import {
     ping
 } from './services'
 
-const supportedAPI = ['makepayment', 'test', 'createhederaobject', 'checktransaction', 'createcontractobject', 'readynesscheck']; // enlist all methods supported by API (e.g. `mw('event', 'user-login');`)
+const supportedAPI = ['makepayment', 'test', 'createhederaobject', 'checktransaction', 'createcontractobject', 'init']; // enlist all methods supported by API (e.g. `mw('event', 'user-login');`)
 /**
  The main entry of the application
  */
@@ -134,8 +134,8 @@ function apiHandler(configuration, api, params, callback = null) {
         case 'createcontractobject':
             return createContractObject({configuration, params}, callback);
 
-        case 'readynesscheck':
-            return readynessCheck(configuration, callback);
+        case 'init':
+            return init(configuration, callback);
 
         case 'test':
             return params;
@@ -274,7 +274,7 @@ var performRequest = function (structure) {
     xhttp.send();
 };
 
-function readynessCheck(params, callback) {
+function init(params, callback) {
     let responese = {
         'ischrome': true,
         'accountPaired': false,
