@@ -2,7 +2,7 @@ import {
     ping
 } from './services'
 
-const supportedAPI = ['init', 'test', 'createhederaobject', 'checktransaction', 'createcontractobject', 'readynesscheck']; // enlist all methods supported by API (e.g. `mw('event', 'user-login');`)
+const supportedAPI = ['makepayment', 'test', 'createhederaobject', 'checktransaction', 'createcontractobject', 'readynesscheck']; // enlist all methods supported by API (e.g. `mw('event', 'user-login');`)
 /**
  The main entry of the application
  */
@@ -32,7 +32,7 @@ function app(window) {
     let queue = globalObject.q;
     if (queue) {
         for (var i = 0; i < queue.length; i++) {
-            if (typeof queue[i][0] !== 'undefined' && queue[i][0].toLowerCase() == 'init') {
+            if (typeof queue[i][0] !== 'undefined' && queue[i][0].toLowerCase() == 'makepayment') {
                 configurations = extendObject(configurations, queue[i][1]);
                 createHederaObject(configurations);
                 console.log('HASH-JS started', configurations);

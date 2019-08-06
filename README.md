@@ -52,7 +52,7 @@ Once the code above is implemented, you can go ahead and make transactions, give
 
 ### Make a payment:
 ```
-mw('init', { 
+mw('makepayment', { 
     submissionnode: "0.0.11", 
     recipientlist: '[{ "to": "0.0.99", "tinybars": "4666667" }]', 
     contentid: '79', 
@@ -61,7 +61,7 @@ mw('init', {
     attrID: 'feature-4', });
 ```
 
-This initializes a payment through the Chrome extension. Currently there can only be one recipient in recipientlist. Take note of the memo used so you can verify the payment later.
+This makepaymentializes a payment through the Chrome extension. Currently there can only be one recipient in recipientlist. Take note of the memo used so you can verify the payment later.
 
 ### Check a Transaction:
 ```
@@ -77,10 +77,10 @@ mw(‘checkTransaction’, { memo_id: ‘1275,70’ }, function(err, data) {
 This checks the transaction for a receipt. It uses the memo as an identification method and you can include more than one receipt by adding a variable limit: memo = memo_id. You can query up to 1MB of transactions.
 
 ## API
-* mw init()
+* mw makepayment()
 * mw checkTransaction() 
 ***
-## mw init(recipientlist, contentid, type, memo, time, attrID)
+## mw makepayment(recipientlist, contentid, type, memo, time, attrID)
 Initializes a payment through the Chrome extension.
 Currently you can only have on recipient in the recipientlist.
 Make note of the memo used so you can verify the payment later.
