@@ -1,5 +1,5 @@
-# MPS.js
-MPS.js is a micropayment service javascript embeddable library. You can trigger micropayment transactions using the chrome extension through hosting the widget yourself by compiling it locally or use our cdn’ed widget. 
+# Hash.js
+Hash.js is a micropayment service javascript embeddable library. You can trigger micropayment transactions using the chrome extension through hosting the widget yourself by compiling it locally or use our cdn’ed widget. 
 * [Upgrade Notes](#important-notes-for-existing-users)
 * [Installation](#installation)
 * [API](#api)
@@ -7,7 +7,7 @@ MPS.js is a micropayment service javascript embeddable library. You can trigger 
 * [Contributing](#contributing)
 * [License](#license)
 
-MPS.js is an Open Source Project, see the Contributing section to find out what this means.
+Hash.js is an Open Source Project, see the Contributing section to find out what this means.
 
 
 ## Important Notes for Existing Users
@@ -26,7 +26,7 @@ Copy and paste the code below to your website.
 ```
 <script> 
 (function(_h, a, s, h, g, ra, ph) { 
-    _h['MPS-JS'] = h;
+    _h['HASH-JS'] = h;
     _h[h] = _h[h] || function() {
         (_h[h].q = _h[h].q || []).push(arguments) }; ra = a.createElement(s), 
             ph = a.getElementsByTagName(s)[0]; 

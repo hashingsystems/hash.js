@@ -9,7 +9,7 @@ const supportedAPI = ['init', 'test', 'createhederaobject', 'checktransaction', 
 const production = true;
 
 function app(window) {
-    console.log('MPS-JS starting');
+    console.log('HASH-JS starting');
     let configurations = {
         paymentserver: production ? "https://mps.hashingsystems.com" : 'http://localhost:9999',
         extensionid: "ligpaondaabclfigagcifobaelemiena",
@@ -25,14 +25,14 @@ function app(window) {
     };
     // all methods that were called till now and stored in queue
     // needs to be called now
-    let globalObject = window[window['MPS-JS']];
+    let globalObject = window[window['HASH-JS']];
     let queue = globalObject.q;
     if (queue) {
         for (var i = 0; i < queue.length; i++) {
             if (typeof queue[i][0] !== 'undefined' && queue[i][0].toLowerCase() == 'init') {
                 configurations = extendObject(configurations, queue[i][1]);
                 createHederaObject(configurations);
-                console.log('MPS-JS started', configurations);
+                console.log('HASH-JS started', configurations);
                 checkForExtension(configurations)
             } else if (typeof queue[i][0] !== 'undefined' && queue[i][0].toLowerCase() == 'createcontractobject') {
                 configurations = extendObject(configurations, queue[i][1]);
