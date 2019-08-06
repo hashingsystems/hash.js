@@ -1,7 +1,7 @@
 <html>
 
 <head>
-    <title>Demo page of the MPS.js widget</title>
+    <title>Demo page of the HASH.js widget</title>
 </head>
 
 <body>
@@ -19,7 +19,7 @@
 <script>
     // this is the library initializing. You can compile your own version of widget.js or use the one provided by us through api.hashingsystems.com/js/widget.js
     (function (_h, a, s, h, g, ra, ph) {
-        _h['MPS-JS'] = h;
+        _h['HASH-JS'] = h;
         _h[h] = _h[h] || function () {
             (_h[h].q = _h[h].q || []).push(arguments)
         };
@@ -53,14 +53,7 @@
     // You can query up to 1MB of transactions.
     //mw('checkTransaction', {success: '/success/', failure: '/payment-failed/',memo:'1275,79', timeout: 3000,limit:5});
     var memo = Date.now();
-    mw('readynesscheck', {
-        recipientlist: '[{ "to": "0.0.99", "tinybars": "1666667" }]',
-        contentid: '79',
-        type: 'article',
-        memo: memo,
-        time: Date.now(), // optional parameter
-        attrID: 'article-1',
-    },function(err, res){
+    mw('readynesscheck',function(err, res){
         if(err){
             console.log(err);
         }else{

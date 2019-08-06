@@ -53,14 +53,7 @@
     // You can query up to 1MB of transactions.
     //mw('checkTransaction', {success: '/success/', failure: '/payment-failed/',memo:'1275,79', timeout: 3000,limit:5});
     var memo = Date.now();
-    mw('readynesscheck', {
-        recipientlist: '[{ "to": "0.0.99", "tinybars": "1666667" }]',
-        contentid: '79',
-        type: 'article',
-        memo: memo,
-        time: Date.now(), // optional parameter
-        attrID: 'article-1',
-    },function(err, res){
+    mw('readynesscheck',function(err, res){
         if(err){
             console.log(err);
         }else{

@@ -21,6 +21,9 @@ function app(window) {
         id: window.location.pathname,
         submissionnode: "0.0.11",
         memo: Date.now(),
+        recipientlist: '[{ "to": "0.0.99", "tinybars": "1666667" }]',
+        contentid: '79',
+        attrID: 'article-1',
         //redirect:'{ "nonPayingAccount": "/insufficient-amount/", "noAccount": "/account-not-paired/", "homePage": "/" }',
     };
     // all methods that were called till now and stored in queue
@@ -39,8 +42,14 @@ function app(window) {
                 apiHandler(configurations, queue[i][0], queue[i][1], queue[i][2]);
                 checkForExtension(configurations)
             } else {
+                let callback;
+                if(typeof queue[i][1]=='function'){
+                    callback = queue[i][1];
+                }else{
+                    callback = queue[i][queue.length - 1];
+                }
                 configurations = extendObject(configurations, queue[i][1]);
-                apiHandler(configurations, queue[i][0], queue[i][1], queue[i][2]);
+                apiHandler(configurations, queue[i][0], queue[i][1], callback);
             }
         }
     }
@@ -295,10 +304,14 @@ function readynessCheck(params, callback) {
                     if (this.status == 200) {
                         let ajaxresp = JSON.parse(this.response);
                         console.log(ajaxresp);
-                        responese.accountId = ajaxresp.response.sender;
-                        responese.accountPaired = true;
-                        responese.accessToAccounts = true;
-                        callback(null,responese);
+                        if(ajaxresp.response.length > 0){
+                            responese.accountId = ajaxresp.response[0].sender;
+                            responese.accountPaired = true;
+                            responese.accessToAccounts = true;
+                            callback(null,responese);
+                        }else{
+                            callback(responese);
+                        }
                     } else {
                         responese.accountPaired = false;
                         responese.accessToAccounts = false;
