@@ -1,8 +1,9 @@
 import {
-    ping
+    ping,prechecker
 } from './services'
 
-const supportedAPI = ['makepayment', 'test', 'createhederaobject', 'checktransaction', 'createcontractobject', 'init']; // enlist all methods supported by API (e.g. `mw('event', 'user-login');`)
+const supportedAPI = ['makepayment', 'test', 'createhederaobject', 'checktransaction',
+    'createcontractobject', 'init','transactionnodechecker']; // enlist all methods supported by API (e.g. `mw('event', 'user-login');`)
 /**
  The main entry of the application
  */
@@ -122,7 +123,10 @@ function apiHandler(configuration, api, params, callback = null) {
     api = api.toLowerCase();
     if (supportedAPI.indexOf(api) === -1) throw Error(`Method ${api} is not supported`);
     console.log(`Handling API call ${api}`, params);
-    switch (api) {
+
+     //return api+'('+params+')';
+
+     switch (api) {
         // TODO: add API implementation
 
         case 'createhederaobject':
@@ -235,8 +239,12 @@ function checkTransaction(params) {
     if (structure.receiver_id && structure.memo_id) {
         URL = structure.baseurl + "/check/" + structure.receiver_id + "/" + structure.memo_id
     } else {
-        URL = structure.baseurl + "/memo/" + structure.memo_id + '?limit=' + structure.limit;
+        if(structure.timestamp)
+            URL = structure.baseurl + "/memo/" + structure.memo_id + '?limit=' + structure.limit + '&timestamp='+structure.timestamp;
+        else
+            URL = structure.baseurl + "/memo/" + structure.memo_id + '?limit=' + structure.limit;
     }
+
     console.log(structure.timeout);
     //setTimeout(performRequest(structure), structure.timeout)
     setTimeout(function () {
@@ -258,7 +266,10 @@ var performRequest = function (structure) {
                         window.origin + structure.success,
                         '_blank'
                     );*/
-                    window.location.replace(window.origin + structure.success);
+                    if(response.response[0].nodeprecheck==0)
+                        window.location.replace(window.origin + structure.success);
+                    else
+                        console.log(prechecker(response.response[0].nodeprecheck));
                 } else {
                     window.location.replace(window.origin + structure.failure);
                 }
@@ -305,6 +316,7 @@ function init(params, callback) {
                         let ajaxresp = JSON.parse(this.response);
                         console.log(ajaxresp);
                         if(ajaxresp.response.length > 0){
+                            console.log(prechecker(ajaxresp.response[0].nodeprecheck));
                             responese.accountId = ajaxresp.response[0].sender;
                             responese.accountPaired = true;
                             responese.accessToAccounts = true;
@@ -341,6 +353,7 @@ function detectmob() {
         return false;
     }
 }
+
 
 
 app(window);
