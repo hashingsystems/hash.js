@@ -53,14 +53,16 @@
     // You can query up to 1MB of transactions.
     //mw('checkTransaction', {success: '/success/', failure: '/payment-failed/',memo:'1275,79', timeout: 3000,limit:5});
     var memo = Date.now();
-    mw('init',function(err, res){
+    /*mw('init',function(err, res){
         if(err){
             console.log(err);
         }else{
             console.log("data");
             console.log(res);
         }
-    });
+    });*/
+
+    mw('getmodal');
 
 </script>
 </body>

@@ -1,9 +1,12 @@
 import {
-    ping,prechecker
+    ping, prechecker
 } from './services'
 
-const supportedAPI = ['makepayment', 'test', 'createhederaobject', 'checktransaction',
-    'createcontractobject', 'init','transactionnodechecker']; // enlist all methods supported by API (e.g. `mw('event', 'user-login');`)
+import {Modal} from './modal';
+
+// enlist all methods supported by API (e.g. `mw('event', 'user-login');`)
+const supportedAPI = ['makepayment', 'test', 'createhederaobject', 'checktransaction', 'getmodal',
+    'createcontractobject', 'init', 'transactionnodechecker'];
 /**
  The main entry of the application
  */
@@ -11,6 +14,12 @@ const production = true;
 
 function app(window) {
     console.log('HASH-JS starting');
+    let today = new Date(),
+        date = today.getFullYear() + '-' + (today.getMonth() + 1) + '-' + today.getDate(),
+        time = today.getHours() + ":" + today.getMinutes(),
+        dateTime = date + ' ' + time,
+        timestamp = new Date(dateTime).getTime();
+
     let configurations = {
         paymentserver: production ? "https://mps.hashingsystems.com" : 'http://localhost:9999',
         extensionid: "ligpaondaabclfigagcifobaelemiena",
@@ -25,6 +34,7 @@ function app(window) {
         recipientlist: '[{ "to": "0.0.99", "tinybars": "1666667" }]',
         contentid: '79',
         attrID: 'article-1',
+        timestamp: timestamp,
         //redirect:'{ "nonPayingAccount": "/insufficient-amount/", "noAccount": "/account-not-paired/", "homePage": "/" }',
     };
     // all methods that were called till now and stored in queue
@@ -44,10 +54,10 @@ function app(window) {
                 checkForExtension(configurations)
             } else {
                 let callback;
-                if(typeof queue[i][1]=='function'){
+                if (typeof queue[i][1] == 'function') {
                     callback = queue[i][1];
-                }else{
-                    callback = queue[i][queue.length - 1];
+                } else {
+                    callback = queue[i][queue[0].length - 1];
                 }
                 configurations = extendObject(configurations, queue[i][1]);
                 apiHandler(configurations, queue[i][0], queue[i][1], callback);
@@ -91,8 +101,9 @@ function checkForExtension(configurations) {
 
 function detect(extensionId, notInstalledCallback, installedCallback) {
     var img = new Image();
+    console.log(extensionId);
     img.onerror = notInstalledCallback;
-    img.onload = installedCallback('installed');
+    img.onload = installedCallback;
     img.src = 'chrome-extension://' + extensionId + '/icons/icon16.png';
 }
 
@@ -124,9 +135,9 @@ function apiHandler(configuration, api, params, callback = null) {
     if (supportedAPI.indexOf(api) === -1) throw Error(`Method ${api} is not supported`);
     console.log(`Handling API call ${api}`, params);
 
-     //return api+'('+params+')';
+    //return api+'('+params+')';
 
-     switch (api) {
+    switch (api) {
         // TODO: add API implementation
 
         case 'createhederaobject':
@@ -140,6 +151,9 @@ function apiHandler(configuration, api, params, callback = null) {
 
         case 'init':
             return init(configuration, callback);
+
+        case 'getmodal':
+            return getmodal();
 
         case 'test':
             return params;
@@ -239,8 +253,8 @@ function checkTransaction(params) {
     if (structure.receiver_id && structure.memo_id) {
         URL = structure.baseurl + "/check/" + structure.receiver_id + "/" + structure.memo_id
     } else {
-        if(structure.timestamp)
-            URL = structure.baseurl + "/memo/" + structure.memo_id + '?limit=' + structure.limit + '&timestamp='+structure.timestamp;
+        if (structure.timestamp)
+            URL = structure.baseurl + "/memo/" + structure.memo_id + '?limit=' + structure.limit + '&timestamp=' + structure.timestamp;
         else
             URL = structure.baseurl + "/memo/" + structure.memo_id + '?limit=' + structure.limit;
     }
@@ -262,16 +276,15 @@ var performRequest = function (structure) {
                 console.log(response);
                 console.log(response.response.length);
                 if (response.response.length >= 1) {
-                    /*window.open(
-                        window.origin + structure.success,
-                        '_blank'
-                    );*/
-                    if(response.response[0].nodeprecheck==0)
+                    if (response.response[0].nodeprecheck == 0)
                         window.location.replace(window.origin + structure.success);
+                    /*else if(prechecker(response.response[0].nodeprecheck)=='INSUFFICIENT_TX_FEE')
+                        window.location.replace(window.origin + 'insufficient-amount');*/
                     else
                         console.log(prechecker(response.response[0].nodeprecheck));
                 } else {
-                    window.location.replace(window.origin + structure.failure);
+                    console.log(response);
+                    //window.location.replace(window.origin + structure.failure);
                 }
                 //window.location.replace(window.origin + structure.success);
                 //callback(null, this.response);
@@ -286,25 +299,28 @@ var performRequest = function (structure) {
 };
 
 function init(params, callback) {
-    let responese = {
-        'ischrome': true,
-        'accountPaired': false,
-        'ismobile': null,
-        'validBrowser': null,
-        'extensionInstalled': null,
-        'accessToAccounts': null,
-        'accountId': null,
-        'submissionNode': params.submissionnode
+    let response = {
+        ischrome: true,
+        accountPaired: false,
+        ismobile: null,
+        validBrowser: null,
+        extensionInstalled: null,
+        accessToAccounts: null,
+        accountId: null,
+        submissionNode: params.submissionnode,
+        error: null,
+        txn_success: false
     };
     let checkIsChrome = isChrome();
-    responese.ischrome = checkIsChrome;
+    response.ischrome = checkIsChrome;
     let mob = detectmob();
-    responese.ismobile = mob;
+    response.ismobile = mob;
     detect(params.extensionid, function () {
-        responese.extensionInstalled = false;
-        callback(null,responese);
+        response.extensionInstalled = false;
+        callback(null, response);
     }, function () {
-        responese.extensionInstalled = true;
+        console.log("sucked")
+        response.extensionInstalled = true;
         let object = createHederaObject(params);
         let url = production ? "https://mps.hashingsystems.com" : 'http://localhost:9999';
         URL = url + "/memo/" + params.memo;
@@ -315,26 +331,31 @@ function init(params, callback) {
                     if (this.status == 200) {
                         let ajaxresp = JSON.parse(this.response);
                         console.log(ajaxresp);
-                        if(ajaxresp.response.length > 0){
+                        if (ajaxresp.response.length > 0) {
                             console.log(prechecker(ajaxresp.response[0].nodeprecheck));
-                            responese.accountId = ajaxresp.response[0].sender;
-                            responese.accountPaired = true;
-                            responese.accessToAccounts = true;
-                            callback(null,responese);
-                        }else{
-                            callback(responese);
+                            response.accountId = ajaxresp.response[0].sender;
+                            response.accountPaired = true;
+                            response.accessToAccounts = true;
+                            if (ajaxresp.response[0].nodeprecheck === 0) {
+                                response.txn_success = true;
+                            }
+                            response.error = prechecker(ajaxresp.response[0].nodeprecheck);
+                            callback(null, response);
+                        } else {
+                            console.log(response);
+                            callback(null, response);
                         }
                     } else {
-                        responese.accountPaired = false;
-                        responese.accessToAccounts = false;
-                        callback(null,responese);
+                        response.accountPaired = false;
+                        response.accessToAccounts = false;
+                        callback(null, response);
                     }
                 }
             };
             xhttp.open("GET", URL, true);
             xhttp.send();
-        },5000);
-        //callback(null,responese);
+        }, 5000);
+        //callback(null,response);
     });
 
 }
@@ -354,6 +375,59 @@ function detectmob() {
     }
 }
 
+function getmodal() {
+    var myContent = '<div class="popup_outer_wrap">\n' +
+        '\t  \t<div class="popup_wrap">\n' +
+        '\t  \t\t<div class="popup_header">Setup Task <a href="javascript:void(0)" class="popup_close">x</a></div>\n' +
+        '\n' +
+        '\t  \t\t<div class="popup_inner">\n' +
+        '\t  \t\t\t<div class="popup_inner_left">\n' +
+        '\n' +
+        '\t  \t\t\t\t<form action="/action_page.php" class="popup_form">\n' +
+        '\t\t\t\t\t  <input type="checkbox" id="img_one" class="popup_chkbox toggle__input" name="img_one" value="img_one" checked>\n' +
+        '\t\t\t\t\t  <label for="img_one">&nbsp; Install Hedera Wallet</label>\n' +
+        '\t\t\t\t\t  <input type="checkbox" id="img_two" class="popup_chkbox toggle__input" name="img_two" value="img_two">\n' +
+        '\t\t\t\t\t  <label for="img_two">&nbsp; "Pair your Account"</label>\n' +
+        '\n' +
+        '\t\t\t\t\t  <input type="checkbox" id="img_three" class="popup_chkbox toggle__input" name="img_three" value="img_three">\n' +
+        '\t\t\t\t\t  <label for="img_three">&nbsp; "Allow Payment Requests"</label>\n' +
+        '\n' +
+        '\t\t\t\t\t  <input type="checkbox" id="img_four" class="popup_chkbox toggle__input" name="img_four" value="img_four">\n' +
+        '\t\t\t\t\t  <label for="img_four">&nbsp; "Get some HBAR"</label>\n' +
+        '\t\t\t\t\t</form>\n' +
+        '\n' +
+        '\t\t\t\t\t<div class="popup_logo">\n' +
+        '\t\t\t\t\t\t<div class="logo_txt">Powered by</div>\n' +
+        '\t\t\t\t\t\t<div class="logo_icon"><img src="//api.hashingsystems.com/img/popup_logo.png"></div>\n' +
+        '\t\t\t\t\t</div>\n' +
+        '\t  \t\t\t\t\n' +
+        '\t  \t\t\t</div>\n' +
+        '\t  \t\t\t<div class="popup_inner_right">\n' +
+        '\n' +
+        '\t  \t\t\t\t<div class="popup_img_sec">\n' +
+        '\t  \t\t\t\t\t<img class="img_one" src="//api.hashingsystems.com/img/img_one.png">\n' +
+        '\t  \t\t\t\t\t<img style="display: none;" class="img_two" src="//api.hashingsystems.com/img/img_two.png">\n' +
+        '\t  \t\t\t\t\t<img style="display: none;" class="img_three" src="//api.hashingsystems.com/img/img_three.png">\n' +
+        '\t  \t\t\t\t\t<img style="display: none;" class="img_four" src="//api.hashingsystems.com/img/img_four.png">\n' +
+        '\t  \t\t\t\t</div>\n' +
+        '\t  \t\t\t\t<div class="txt_wrap">\n' +
+        '\t\t  \t\t\t\t<div class="txt_header">Lets get you started!</div>\n' +
+        '\t\t  \t\t\t\t<div class="txt_content">Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et </div>\n' +
+        '\t\t  \t\t\t\t<div class="popup_btn">\n' +
+        '\t\t  \t\t\t\t\t<a href="">I\'m Ready</a>\n' +
+        '\t\t  \t\t\t\t</div>\n' +
+        '\t\t  \t\t\t</div>\n' +
+        '\t  \t\t\t\t\n' +
+        '\t  \t\t\t</div>\n' +
+        '\t  \t\t</div>\n' +
+        '\t  \t</div>\n' +
+        '\t</div>\n';
+
+    var myModal = new Modal({
+        content: myContent
+    });
+    myModal.open();
+}
 
 
 app(window);
