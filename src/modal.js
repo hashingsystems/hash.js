@@ -1,6 +1,5 @@
 // Define our constructor
 function Modal() {
-    console.log("test")
     // Create global element references
     this.closeButton = null;
     this.modal = null;
@@ -17,10 +16,8 @@ function Modal() {
         content: "",
         maxWidth: 600,
         minWidth: 280,
-        overlay: true
-    }
-
-    console.log(this);
+        overlay: false
+    };
 
     // Create options by extending defaults with the passed in arugments
     if (arguments[0] && typeof arguments[0] === "object") {
@@ -34,7 +31,6 @@ function Modal() {
 // Public Methods
 Modal.prototype.close = function () {
     var _ = this;
-    console.log(this.modal.className);
     this.modal.className = this.modal.className.replace(" hash-open", "");
     this.overlay.className = this.overlay.className.replace(" hash-open", "");
     this.modal.addEventListener(this.transitionEnd, function () {
@@ -50,7 +46,7 @@ Modal.prototype.open = function () {
     initializeEvents.call(this);
     window.getComputedStyle(this.modal).height;
     this.modal.className = this.modal.className + (this.modal.offsetHeight > window.innerHeight ? " hash-open hash-anchored" : " hash-open");
-    this.overlay.className = this.overlay.className + " hash-open";
+    //this.overlay.className = this.overlay.className + " hash-open";
 };
 
 // Private Methods
@@ -75,8 +71,14 @@ function buildOut() {
     // Create modal element
     this.modal = document.createElement("div");
     this.modal.className = "hash-modal " + this.options.className;
-    this.modal.style.minWidth = this.options.minWidth + "px";
-    this.modal.style.maxWidth = this.options.maxWidth + "px";
+    /*this.modal.style.minWidth = this.options.minWidth + "px";
+    this.modal.style.maxWidth = this.options.maxWidth + "px";*/
+
+    // If closeButton option is true, add a close button
+    if (this.options.closeButton === true) {
+        this.closeButton = document.getElementById('popup-close-btn');
+        console.log(this.closeButton)
+    }
 
     // Create content area and append to modal
     contentHolder = document.createElement("div");
@@ -99,13 +101,14 @@ function extendDefaults(source, properties) {
             source[property] = properties[property];
         }
     }
-    console.log(source);
     return source;
 }
 
 function initializeEvents() {
-
+    console.log("test")
+    console.log(this.closeButton)
     if (this.closeButton) {
+        console.log("test");
         this.closeButton.addEventListener('click', this.close.bind(this));
     }
 

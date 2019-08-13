@@ -378,7 +378,7 @@ function detectmob() {
 function getmodal() {
     var myContent = '<div class="popup_outer_wrap">\n' +
         '\t  \t<div class="popup_wrap">\n' +
-        '\t  \t\t<div class="popup_header">Setup Task <a href="javascript:void(0)" class="popup_close">x</a></div>\n' +
+        '\t  \t\t<div class="popup_header">Setup Task <a id="popup-close-btn" href="javascript:void(0)" class="popup_close">x</a></div>\n' +
         '\n' +
         '\t  \t\t<div class="popup_inner">\n' +
         '\t  \t\t\t<div class="popup_inner_left">\n' +
