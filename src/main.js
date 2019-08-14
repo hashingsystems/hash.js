@@ -319,7 +319,6 @@ function init(params, callback) {
         response.extensionInstalled = false;
         callback(null, response);
     }, function () {
-        console.log("sucked")
         response.extensionInstalled = true;
         let object = createHederaObject(params);
         let url = production ? "https://mps.hashingsystems.com" : 'http://localhost:9999';
