@@ -47,6 +47,9 @@ Modal.prototype.open = function () {
     window.getComputedStyle(this.modal).height;
     this.modal.className = this.modal.className + (this.modal.offsetHeight > window.innerHeight ? " hash-open hash-anchored" : " hash-open");
     //this.overlay.className = this.overlay.className + " hash-open";
+    document.querySelector('.popup_close').onclick = function() {
+        document.querySelector('.popup_outer_wrap').style.display = "none";
+    };
 };
 
 // Private Methods
@@ -93,6 +96,44 @@ function buildOut() {
     document.body.appendChild(docFrag);
 
 }
+
+imgchangeFunction = function () {
+    var chboxs = document.getElementsByName("img_chkbox");
+    var var_check = "";
+
+    var img_all = document.getElementsByClassName("img_all");
+
+    for(var i=0;i<chboxs.length;i++) {
+        if(chboxs[i].checked){
+            var_check = var_check.concat(chboxs[i].value);
+        }
+    }
+
+    if(var_check == 'img_one'){
+        document.querySelector('.img_two').style.display = "none";
+        document.querySelector('.img_three').style.display = "none";
+        document.querySelector('.img_four').style.display = "none";
+        document.querySelector('.img_one').style.display = "block";
+    }
+    if(var_check == 'img_oneimg_two') {
+        document.querySelector('.img_one').style.display = "none";
+        document.querySelector('.img_three').style.display = "none";
+        document.querySelector('.img_four').style.display = "none";
+        document.querySelector('.img_two').style.display = "block";
+    }
+    if(var_check == 'img_oneimg_twoimg_three'){
+        document.querySelector('.img_one').style.display = "none";
+        document.querySelector('.img_two').style.display = "none";
+        document.querySelector('.img_four').style.display = "none";
+        document.querySelector('.img_three').style.display = "block";
+    }
+    if(var_check == 'img_oneimg_twoimg_threeimg_four') {
+        document.querySelector('.img_one').style.display = "none";
+        document.querySelector('.img_two').style.display = "none";
+        document.querySelector('.img_three').style.display = "none";
+        document.querySelector('.img_four').style.display = "block";
+    }
+};
 
 function extendDefaults(source, properties) {
     var property;

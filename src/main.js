@@ -378,21 +378,21 @@ function detectmob() {
 function getmodal() {
     var myContent = '<div class="popup_outer_wrap">\n' +
         '\t  \t<div class="popup_wrap">\n' +
-        '\t  \t\t<div class="popup_header">Setup Task <a id="popup-close-btn" href="javascript:void(0)" class="popup_close">x</a></div>\n' +
+        '\t  \t\t<div class="popup_header">Setup Task <a href="javascript:void(0)" class="popup_close">x</a></div>\n' +
         '\n' +
         '\t  \t\t<div class="popup_inner">\n' +
         '\t  \t\t\t<div class="popup_inner_left">\n' +
         '\n' +
         '\t  \t\t\t\t<form action="/action_page.php" class="popup_form">\n' +
-        '\t\t\t\t\t  <input type="checkbox" id="img_one" class="popup_chkbox toggle__input" name="img_one" value="img_one" checked>\n' +
+        '\t\t\t\t\t  <input type="checkbox" onchange= "imgchangeFunction()" id="img_one" class="popup_chkbox toggle__input" name="img_chkbox" value="img_one">\n' +
         '\t\t\t\t\t  <label for="img_one">&nbsp; Install Hedera Wallet</label>\n' +
-        '\t\t\t\t\t  <input type="checkbox" id="img_two" class="popup_chkbox toggle__input" name="img_two" value="img_two">\n' +
+        '\t\t\t\t\t  <input type="checkbox" onchange= "imgchangeFunction()" id="img_two" class="popup_chkbox toggle__input" name="img_chkbox" value="img_two">\n' +
         '\t\t\t\t\t  <label for="img_two">&nbsp; "Pair your Account"</label>\n' +
         '\n' +
-        '\t\t\t\t\t  <input type="checkbox" id="img_three" class="popup_chkbox toggle__input" name="img_three" value="img_three">\n' +
+        '\t\t\t\t\t  <input type="checkbox" onchange= "imgchangeFunction()" id="img_three" class="popup_chkbox toggle__input" name="img_chkbox" value="img_three">\n' +
         '\t\t\t\t\t  <label for="img_three">&nbsp; "Allow Payment Requests"</label>\n' +
         '\n' +
-        '\t\t\t\t\t  <input type="checkbox" id="img_four" class="popup_chkbox toggle__input" name="img_four" value="img_four">\n' +
+        '\t\t\t\t\t  <input type="checkbox" onchange= "imgchangeFunction()" id="img_four" class="popup_chkbox toggle__input" name="img_chkbox" value="img_four">\n' +
         '\t\t\t\t\t  <label for="img_four">&nbsp; "Get some HBAR"</label>\n' +
         '\t\t\t\t\t</form>\n' +
         '\n' +
@@ -420,8 +420,7 @@ function getmodal() {
         '\t  \t\t\t\t\n' +
         '\t  \t\t\t</div>\n' +
         '\t  \t\t</div>\n' +
-        '\t  \t</div>\n' +
-        '\t</div>\n';
+        '\t  \t</div>';
 
     var myModal = new Modal({
         content: myContent
