@@ -300,7 +300,6 @@ var performRequest = function (structure) {
 
 function init(params, callback) {
     let response = {
-        ischrome: true,
         accountPaired: false,
         ismobile: null,
         validBrowser: null,
@@ -311,10 +310,8 @@ function init(params, callback) {
         error: null,
         txn_success: false
     };
-    let checkIsChrome = isChrome();
-    response.ischrome = checkIsChrome;
-    let mob = detectmob();
-    response.ismobile = mob;
+    response.validBrowser = isChrome();
+    response.ismobile = detectmob();
     detect(params.extensionid, function () {
         response.extensionInstalled = false;
         callback(null, response);
@@ -324,10 +321,10 @@ function init(params, callback) {
         let url = production ? "https://mps.hashingsystems.com" : 'http://localhost:9999';
         URL = url + "/memo/" + params.memo;
         setTimeout(function () {
-            var xhttp = new XMLHttpRequest();
+            let xhttp = new XMLHttpRequest();
             xhttp.onreadystatechange = function () {
-                if (this.readyState == 4) {
-                    if (this.status == 200) {
+                if (this.readyState === 4) {
+                    if (this.status === 200) {
                         let ajaxresp = JSON.parse(this.response);
                         console.log(ajaxresp);
                         if (ajaxresp.response.length > 0) {
