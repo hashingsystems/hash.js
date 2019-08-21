@@ -1,14 +1,12 @@
-import {
-    ping, prechecker
-} from './services'
-
+import {ping, prechecker} from './services';
+import * as methods from './methods';
+import * as general from './general';
 import {Modal} from './modal';
 
 // enlist all methods supported by API (e.g. `mw('event', 'user-login');`)
-const supportedAPI = ['makepayment', 'test', 'createhederaobject', 'checktransaction', 'getmodal',
-    'createcontractobject', 'init', 'transactionnodechecker'];
+const supportedAPI = methods.methods();
 /**
- The main entry of the application
+ * The main entry of the application
  */
 const production = true;
 
@@ -27,22 +25,24 @@ function app(window) {
         type: "article",
         time: Date.now(),
         redirect: '{ "nonPayingAccount": "/insufficient-amount/", "noAccount": "/account-not-paired/", "homePage": "/"}',
-        // this might make a good default id for the content
-        id: window.location.pathname,
         submissionnode: "0.0.11",
         memo: Date.now(),
         recipientlist: '[{ "to": "0.0.99", "tinybars": "1666667" }]',
         contentid: '79',
         attrID: 'article-1',
         timestamp: timestamp,
-        //redirect:'{ "nonPayingAccount": "/insufficient-amount/", "noAccount": "/account-not-paired/", "homePage": "/" }',
+        /*this might make a good default id for the content*/
+        id: window.location.pathname,
     };
-    // all methods that were called till now and stored in queue
-    // needs to be called now
+
+    /* *
+      * all methods that were called till now and stored in queue
+      * needs to be called now
+      * */
     let globalObject = window[window['HASH-JS']];
     let queue = globalObject.q;
     if (queue) {
-        for (var i = 0; i < queue.length; i++) {
+        for (let i = 0; i < queue.length; i++) {
             if (typeof queue[i][0] !== 'undefined' && queue[i][0].toLowerCase() == 'makepayment') {
                 configurations = extendObject(configurations, queue[i][1]);
                 createHederaObject(configurations);
@@ -86,8 +86,13 @@ function checkForExtension(configurations) {
             recordResponse(response);
         });
 
-        //console.log(chrome.runtime.connect(EXTENSION_ID,'version'));
-        /*chrome.runtime.sendMessage(EXTENSION_ID, 'version', response => {
+        /**
+         * @INFO : This was used in order to check if the extension was installed or not,
+         * Now replace by
+         * @detect()
+         * */
+        /*
+        chrome.runtime.sendMessage(EXTENSION_ID, 'version', response => {
             console.log(response)
             return;
             if (!response) {
@@ -95,7 +100,9 @@ function checkForExtension(configurations) {
             } else {
                 recordResponse(response);
             }
-        })*/
+        })
+        */
+
     }
 }
 
@@ -127,34 +134,30 @@ function isChrome() {
 }
 
 /**
- Method that handles all API calls
- */
+ * Method that handles all API calls
+ * @TODO : Can be implemented next way
+ * */
 function apiHandler(configuration, api, params, callback = null) {
     if (!api) throw Error('API method required');
     api = api.toLowerCase();
+    console.log(supportedAPI)
     if (supportedAPI.indexOf(api) === -1) throw Error(`Method ${api} is not supported`);
     console.log(`Handling API call ${api}`, params);
 
-    //return api+'('+params+')';
-
     switch (api) {
         // TODO: add API implementation
-
         case 'createhederaobject':
             return createHederaObject(params);
-
         case 'checktransaction':
             return checkTransaction({configuration, params}, callback);
-
         case 'createcontractobject':
             return createContractObject({configuration, params}, callback);
-
         case 'init':
             return init(configuration, callback);
-
         case 'getmodal':
             return getmodal();
-
+        case 'makeTransaction':
+            return makeTransaction();
         case 'test':
             return params;
         default:
@@ -231,7 +234,6 @@ function createContractObject(params) {
 }
 
 function checkTransaction(params) {
-
     let memo_id = params.configuration.memo;
     let url = production ? "https://mps.hashingsystems.com" : 'http://localhost:9999';
     let structure = {
@@ -267,19 +269,21 @@ function checkTransaction(params) {
 }
 
 var performRequest = function (structure) {
-    console.log(structure)
     var xhttp = new XMLHttpRequest();
     xhttp.onreadystatechange = function () {
-        if (this.readyState == 4) {
-            if (this.status == 200) {
+        if (this.readyState === 4) {
+            if (this.status === 200) {
                 let response = JSON.parse(this.response);
                 console.log(response);
                 console.log(response.response.length);
                 if (response.response.length >= 1) {
-                    if (response.response[0].nodeprecheck == 0)
+                    if (response.response[0].nodeprecheck === 0)
                         window.location.replace(window.origin + structure.success);
-                    /*else if(prechecker(response.response[0].nodeprecheck)=='INSUFFICIENT_TX_FEE')
-                        window.location.replace(window.origin + 'insufficient-amount');*/
+                    /**
+                     * @TODO : Need to check for returning appropriate values or redirection
+                     * else if(prechecker(response.response[0].nodeprecheck)=='INSUFFICIENT_TX_FEE')
+                     * window.location.replace(window.origin + 'insufficient-amount');
+                     * */
                     else
                         console.log(prechecker(response.response[0].nodeprecheck));
                 } else {
@@ -317,7 +321,7 @@ function init(params, callback) {
         callback(null, response);
     }, function () {
         response.extensionInstalled = true;
-        let object = createHederaObject(params);
+        createHederaObject(params);
         let url = production ? "https://mps.hashingsystems.com" : 'http://localhost:9999';
         URL = url + "/memo/" + params.memo;
         setTimeout(function () {
@@ -372,56 +376,23 @@ function detectmob() {
 }
 
 function getmodal() {
-    var myContent = '<div class="popup_outer_wrap">\n' +
-        '\t  \t<div class="popup_wrap">\n' +
-        '\t  \t\t<div class="popup_header">Setup Task <a href="javascript:void(0)" class="popup_close">x</a></div>\n' +
-        '\n' +
-        '\t  \t\t<div class="popup_inner">\n' +
-        '\t  \t\t\t<div class="popup_inner_left">\n' +
-        '\n' +
-        '\t  \t\t\t\t<form action="/action_page.php" class="popup_form">\n' +
-        '\t\t\t\t\t  <input type="checkbox" onchange= "imgchangeFunction()" id="img_one" class="popup_chkbox toggle__input" name="img_chkbox" value="img_one">\n' +
-        '\t\t\t\t\t  <label for="img_one">&nbsp; Install Hedera Wallet</label>\n' +
-        '\t\t\t\t\t  <input type="checkbox" onchange= "imgchangeFunction()" id="img_two" class="popup_chkbox toggle__input" name="img_chkbox" value="img_two">\n' +
-        '\t\t\t\t\t  <label for="img_two">&nbsp; "Pair your Account"</label>\n' +
-        '\n' +
-        '\t\t\t\t\t  <input type="checkbox" onchange= "imgchangeFunction()" id="img_three" class="popup_chkbox toggle__input" name="img_chkbox" value="img_three">\n' +
-        '\t\t\t\t\t  <label for="img_three">&nbsp; "Allow Payment Requests"</label>\n' +
-        '\n' +
-        '\t\t\t\t\t  <input type="checkbox" onchange= "imgchangeFunction()" id="img_four" class="popup_chkbox toggle__input" name="img_chkbox" value="img_four">\n' +
-        '\t\t\t\t\t  <label for="img_four">&nbsp; "Get some HBAR"</label>\n' +
-        '\t\t\t\t\t</form>\n' +
-        '\n' +
-        '\t\t\t\t\t<div class="popup_logo">\n' +
-        '\t\t\t\t\t\t<div class="logo_txt">Powered by</div>\n' +
-        '\t\t\t\t\t\t<div class="logo_icon"><img src="//api.hashingsystems.com/img/popup_logo.png"></div>\n' +
-        '\t\t\t\t\t</div>\n' +
-        '\t  \t\t\t\t\n' +
-        '\t  \t\t\t</div>\n' +
-        '\t  \t\t\t<div class="popup_inner_right">\n' +
-        '\n' +
-        '\t  \t\t\t\t<div class="popup_img_sec">\n' +
-        '\t  \t\t\t\t\t<img class="img_one" src="//api.hashingsystems.com/img/img_one.png">\n' +
-        '\t  \t\t\t\t\t<img style="display: none;" class="img_two" src="//api.hashingsystems.com/img/img_two.png">\n' +
-        '\t  \t\t\t\t\t<img style="display: none;" class="img_three" src="//api.hashingsystems.com/img/img_three.png">\n' +
-        '\t  \t\t\t\t\t<img style="display: none;" class="img_four" src="//api.hashingsystems.com/img/img_four.png">\n' +
-        '\t  \t\t\t\t</div>\n' +
-        '\t  \t\t\t\t<div class="txt_wrap">\n' +
-        '\t\t  \t\t\t\t<div class="txt_header">Lets get you started!</div>\n' +
-        '\t\t  \t\t\t\t<div class="txt_content">Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et </div>\n' +
-        '\t\t  \t\t\t\t<div class="popup_btn">\n' +
-        '\t\t  \t\t\t\t\t<a href="">I\'m Ready</a>\n' +
-        '\t\t  \t\t\t\t</div>\n' +
-        '\t\t  \t\t\t</div>\n' +
-        '\t  \t\t\t\t\n' +
-        '\t  \t\t\t</div>\n' +
-        '\t  \t\t</div>\n' +
-        '\t  \t</div>';
-
+    var myContent = general.getmodalContent();
     var myModal = new Modal({
         content: myContent
     });
     myModal.open();
+}
+
+function makeTransaction() {
+    let params = {
+        transaction_procesing: true,
+        transaction_failed: false,
+        transaction_success: false
+    }
+
+    if (checkTransaction()) {
+
+    }
 }
 
 
