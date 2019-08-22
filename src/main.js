@@ -157,7 +157,7 @@ function apiHandler(configuration, api, params, callback = null) {
         case 'getmodal':
             return getmodal();
         case 'makeTransaction':
-            return makeTransaction();
+            return makeTransaction(configuration, callback);
         case 'test':
             return params;
         default:
@@ -383,16 +383,23 @@ function getmodal() {
     myModal.open();
 }
 
-function makeTransaction() {
+function makeTransaction(configuration, callback) {
     let params = {
         transaction_procesing: true,
         transaction_failed: false,
         transaction_success: false
-    }
+    };
+    init(configuration, function(err, res){
+        if(err){
+            console.log(err);
+        }else{
+            console.log(res);
+            if(res){
+                callback(res);
+            }
+        }
+    });
 
-    if (checkTransaction()) {
-
-    }
 }
 
 
