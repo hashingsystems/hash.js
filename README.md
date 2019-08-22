@@ -77,9 +77,27 @@ mw(‘checkTransaction’, { memo_id: ‘1275,70’ }, function(err, data) {
 This checks the transaction for a receipt. It uses the memo as an identification method and you can include more than one receipt by adding a variable limit: memo = memo_id. You can query up to 1MB of transactions.
 
 ## API
+* mw init()
 * mw makepayment()
 * mw checkTransaction() 
+* mw getmodal()
 ***
+## mw init(recipientlist, contentid, type, memo, time, attrID)
+Initializes a payment through the Chrome extension.
+Currently you can only have on recipient in the recipientlist.
+Make note of the memo used so you can verify the payment later.
+Checks all pre-requisites for performing the transaction
+
+
+Arguments:
+* `recipientlist`: the money receiver
+* `contentid`: ID of the content
+* `type`: article, download, video, etc (what is being monetized)
+* `memo`: optional memo field, but to query a transaction you must set one and know it
+* `time`: optionable field
+* `attrID`: HTML object that handles where the Hedera micropayment object is going to be inserted
+***
+
 ## mw makepayment(recipientlist, contentid, type, memo, time, attrID)
 Initializes a payment through the Chrome extension.
 Currently you can only have on recipient in the recipientlist.
@@ -108,6 +126,16 @@ Arguments:
  
  You can view an example return here:
  [mps.hashingsystems.com/memo/1561661493370?limit=5](https://mps.hashingsystems.com/memo/1561661493370?limit=5)
+
+## mw getModal()
+Initializes a popup modal for asking user if they have completed all the necessary steps 
+for performing transaction.
+Steps includes: 
+* Is extension added to chrome
+* Is account created
+* Is Account paired
+* Is Hbar loaded in
+
 
 
 ## Browser
