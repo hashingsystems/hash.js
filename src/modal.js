@@ -80,7 +80,6 @@ function buildOut() {
     // If closeButton option is true, add a close button
     if (this.options.closeButton === true) {
         this.closeButton = document.getElementById('popup-close-btn');
-        console.log(this.closeButton)
     }
 
     // Create content area and append to modal
@@ -146,10 +145,7 @@ function extendDefaults(source, properties) {
 }
 
 function initializeEvents() {
-    console.log("test")
-    console.log(this.closeButton)
     if (this.closeButton) {
-        console.log("test");
         this.closeButton.addEventListener('click', this.close.bind(this));
     }
 
@@ -165,6 +161,5 @@ function transitionSelect() {
     if (el.style.OTransition) return "oTransitionEnd";
     return 'transitionend';
 }
-
 //exporting module
 module.exports.Modal = Modal;

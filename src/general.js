@@ -1,7 +1,17 @@
+import * as Config from './config';
+
+let production = Config.default.production;
+
+let today = new Date(),
+    date = today.getFullYear() + '-' + (today.getMonth() + 1) + '-' + today.getDate(),
+    time = today.getHours() + ":" + today.getMinutes(),
+    dateTime = date + ' ' + time,
+    timestamp = new Date(dateTime).getTime();
+
 export function getmodalContent() {
     return '<div class="popup_outer_wrap">\n' +
     '\t  \t<div class="popup_wrap">\n' +
-    '\t  \t\t<div class="popup_header">Setup Task <a href="javascript:void(0)" class="popup_close">x</a></div>\n' +
+    '\t  \t\t<div class="popup_header">Setup Task <a href="javascript:void(0)" class="popup_close" id="popup-close-btn">x</a></div>\n' +
     '\n' +
     '\t  \t\t<div class="popup_inner">\n' +
     '\t  \t\t\t<div class="popup_inner_left">\n' +
@@ -44,4 +54,23 @@ export function getmodalContent() {
     '\t  \t\t\t</div>\n' +
     '\t  \t\t</div>\n' +
     '\t  \t</div>';
+}
+
+export function constructConfiguration(){
+    return {
+        paymentserver: production ? "https://mps.hashingsystems.com" : 'http://localhost:9999',
+        extensionid: "ligpaondaabclfigagcifobaelemiena",
+        error: "/no-extension",
+        type: "article",
+        time: Date.now(),
+        redirect: '{ "nonPayingAccount": "/insufficient-amount/", "noAccount": "/account-not-paired/", "homePage": "/"}',
+        submissionnode: "0.0.11",
+        memo: Date.now(),
+        recipientlist: '[{ "to": "0.0.99", "tinybars": "1666667" }]',
+        contentid: '79',
+        attrID: 'article-1',
+        timestamp: timestamp,
+        /*this might make a good default id for the content*/
+        id: window.location.pathname,
+    };
 }
