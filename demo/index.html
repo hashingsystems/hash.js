@@ -284,6 +284,12 @@
     //mw('checkTransaction', {success: '/success/', failure: '/payment-failed/',memo:'1275,79', timeout: 3000,limit:5});
     var memo = Date.now();
     mw('init',{attrID:'hedera-object-append-div'}, function (err, res) {
+        let time = new Date(res.time),
+            minutes = time.getMinutes(),
+            hours = time.getHours() % 12,
+            ampm = time.getHours() >= 12 ? 'pm' : 'am';
+
+        jQuery('.time_logo span').text(hours+':'+minutes+' '+ampm);
         if (err) {
 
         } else {
@@ -299,13 +305,13 @@
             }
             if(res.extensionInstalled===false && res.validBrowser === true){
                 jQuery('#heading').text('Transaction could not be made');
-                jQuery('#response-message').text('Hedera Extension is not installed, please install the hedera extension');
+                jQuery('#response-message').text(res.message);
                 jQuery('.card.animated.slideInDown').show();
                 jQuery('.msg_failed').show();
             }
             if(res.txn_success===false && !res.error && res.validBrowser === true){
                 jQuery('#heading').text('Transaction could not be made');
-                jQuery('#response-message').text('Extension could not catch the hedera object, please refresh the page again. Thanks');
+                jQuery('#response-message').text(res.message);
                 jQuery('.card.animated.slideInDown').show();
                 jQuery('.msg_failed').show();
             }
@@ -313,6 +319,7 @@
             if(res.error && res.validBrowser === true){
                 jQuery('#heading').text(res.error);
                 jQuery('.card.animated.slideInDown').show();
+                jQuery('#response-message').text(res.message);
                 jQuery('.msg_failed').show();
             }
 
@@ -320,6 +327,7 @@
                 jQuery('#heading').text("Transaction Successfull");
                 jQuery('#response-message').text('Transaction performed successfully');
                 jQuery('.card.animated.slideInDown').show();
+                jQuery('#response-message').text(res.message);
                 jQuery('.msg_success').show();
             }
         }

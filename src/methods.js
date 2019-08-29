@@ -3,11 +3,11 @@ export function methods() {
         //object creation methods
         'createhederaobject', 'createcontractobject',
 
-        //main initial method
+        //main initial method to check readyness for performing transaction
         'init',
 
         //transaction related methods
-        'makepayment', 'makeTransaction', 'checktransaction',
+        'makepayment', 'makeTransaction', 'checktransaction', 'assist_transaction',
 
         //modal related methods
         'getmodal'

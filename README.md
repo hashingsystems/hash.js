@@ -82,12 +82,12 @@ This checks the transaction for a receipt. It uses the memo as an identification
 * mw checkTransaction() 
 * mw getmodal()
 ***
-## mw init(recipientlist, contentid, type, memo, time, attrID)
+## mw init(recipientlist, contentid, type, memo, time, attrID, *callback* function)
 Initializes a payment through the Chrome extension.
 Currently you can only have on recipient in the recipientlist.
 Make note of the memo used so you can verify the payment later.
 Checks all pre-requisites for performing the transaction
-
+Provides the response for transaction failure or success
 
 Arguments:
 * `recipientlist`: the money receiver
@@ -97,6 +97,47 @@ Arguments:
 * `time`: optionable field
 * `attrID`: HTML object that handles where the Hedera micropayment object is going to be inserted
 ***
+
+Response:
+* `accountPaired` bool: If account is paired
+*  `ismobile` bool: If the device is mobile
+* `extensionInstalled` bool: If the extension is intalled or not
+* `accessToAccunt` bool: Ifaccount is set successfully for performing the transaction
+* `accountId` String: Payer account ID
+* `SubmissionNode` String: Hedera Submission Node
+* `error` (error message) String: The error existence flag, used to check if error
+* `txn_success` bool: Transaction success flag
+* `time` timestamp: Timestamp at which transaction was requested
+* `message` (response message) String: Corresponding message to error or success
+
+```
+mw('init',{args}, function(err, res){
+  if(err){
+     console.log(err);
+  }else{
+     // you can perform the action in accordance to your need
+     // you can see our demo ** site for more information
+  }
+});
+```
+
+## mw assistTransaction(recipientlist, contentid, type, memo, time, attrID , *callback* function)
+Similar to mw init, but is used for transaction notification 
+It provides the stepwise notification from transaction state, processing to success or failed
+Demo is provided on https://mps.hashingsystems.com
+
+##*usage*
+``
+  mw('assisttransaction',args, function(){
+     if(err){
+          console.log(err);
+          // do your thing here
+       }else{
+          // you can perform the action in accordance to your need
+          // you can see our demo ** site for more information
+       }
+  });
+`` 
 
 ## mw makepayment(recipientlist, contentid, type, memo, time, attrID)
 Initializes a payment through the Chrome extension.
@@ -127,7 +168,7 @@ Arguments:
  You can view an example return here:
  [mps.hashingsystems.com/memo/1561661493370?limit=5](https://mps.hashingsystems.com/memo/1561661493370?limit=5)
 
-## mw getModal()
+## mw getModal(*callback* function)
 Initializes a popup modal for asking user if they have completed all the necessary steps 
 for performing transaction.
 Steps includes: 
@@ -136,8 +177,15 @@ Steps includes:
 * Is Account paired
 * Is Hbar loaded in
 
-
-
+```
+mw('getmodal', function(err, res){
+    if(err){
+       console.log(err);
+    }else{
+       console.log(res);
+    }
+});
+```
 ## Browser
 You can learn more at [api.hashingsystems.com](https://api.hashingsystems.com/)
 

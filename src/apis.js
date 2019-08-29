@@ -69,7 +69,7 @@ export function createContractObject(params, callback) {
 
 export function checkTransaction(params, callback) {
     let memo_id = params.configuration.memo;
-    let url = Config.default.production ? "https://mps.hashingsystems.com" : 'http://localhost:9999';
+    let url = Config.default.production ? Config.default.productionServer : 'http://localhost:8099';
     let structure = {
         baseurl: url,
         memo_id: memo_id,
@@ -112,18 +112,23 @@ export function init(params, callback) {
         accountId: null,
         submissionNode: params.submissionnode,
         error: null,
-        txn_success: false
+        txn_success: false,
+        time: params.time,
+        message: null
     };
     response.validBrowser = libraries.isChrome();
+    if(response.validBrowser===false)
+        response.message = "The browser is not chrome";
     response.ismobile = libraries.detectmob();
     libraries.detect(params.extensionid, function () {
         response.extensionInstalled = false;
+        response.message = "Extension Not Installed";
         callback(null, response);
     }, function () {
         response.extensionInstalled = true;
         createHederaObject(params, function(err, hobject){
             if(hobject){
-                let url = Config.default.production ? "https://mps.hashingsystems.com" : 'http://localhost:9999';
+                let url = Config.default.production ? Config.default.productionServer : 'http://localhost:8099';
                 URL = url + "/memo/" + params.memo;
                 setTimeout(function () {
                     let xhttp = new XMLHttpRequest();
@@ -137,13 +142,16 @@ export function init(params, callback) {
                                     response.accountId = ajaxresp.response[0].sender;
                                     response.accountPaired = true;
                                     response.accessToAccounts = true;
-                                    if (ajaxresp.response[0].nodeprecheck === 0) {
+                                    if (parseInt(ajaxresp.response[0].nodeprecheck) === 0) {
                                         response.txn_success = true;
+                                    }else{
+                                        response.error = services.prechecker(ajaxresp.response[0].nodeprecheck);
                                     }
-                                    response.error = services.prechecker(ajaxresp.response[0].nodeprecheck);
+                                    response.message = services.prechecker(ajaxresp.response[0].nodeprecheck);
                                     callback(null, response);
                                 } else {
                                     console.log(response);
+                                    response.message = 'Transaction failed, this is mostly due to extension not being able to detect hedera object, please refresh the page.';
                                     callback(null, response);
                                 }
                             } else {
@@ -157,7 +165,8 @@ export function init(params, callback) {
                     xhttp.send();
                 }, 5000);
             }else{
-                callback({'success':false,'message':'Could not create hedera object'}, false);
+                response.message = "Hedera object could not be detected, please try again refreshing the page.";
+                callback(false, response);
             }
         });
         //callback(null,response);
@@ -190,4 +199,58 @@ export function makeTransaction(configuration, callback) {
         }
     });
 
+}
+
+export function assist_transaction(configuration, callback) {
+    let response = {
+        accountPaired: false,
+        ismobile: null,
+        validBrowser: null,
+        extensionInstalled: null,
+        accessToAccounts: null,
+        accountId: null,
+        submissionNode: params.submissionnode,
+        error: null,
+        txn_success: false,
+        time: configuration.time
+    };
+    createHederaObject(params, function(err, hobject){
+        if(hobject){
+            let url = Config.default.production ? Config.default.productionServer : 'http://localhost:8099';
+            URL = url + "/memo/" + params.memo;
+            setTimeout(function () {
+                let xhttp = new XMLHttpRequest();
+                xhttp.onreadystatechange = function () {
+                    if (this.readyState === 4) {
+                        if (this.status === 200) {
+                            let ajaxresp = JSON.parse(this.response);
+                            console.log(ajaxresp);
+                            if (ajaxresp.response.length > 0) {
+                                console.log(services.prechecker(ajaxresp.response[0].nodeprecheck));
+                                response.accountId = ajaxresp.response[0].sender;
+                                response.accountPaired = true;
+                                response.accessToAccounts = true;
+                                if (ajaxresp.response[0].nodeprecheck === 0) {
+                                    response.txn_success = true;
+                                }
+                                response.error = services.prechecker(ajaxresp.response[0].nodeprecheck);
+                                callback(null, response);
+                            } else {
+                                console.log(response);
+                                callback(null, response);
+                            }
+                        } else {
+                            response.accountPaired = false;
+                            response.accessToAccounts = false;
+                            callback(null, response);
+                        }
+                    }
+                };
+                xhttp.open("GET", URL, true);
+                xhttp.send();
+            }, 5000);
+        }else{
+            callback({'success':false,'message':'Could not create hedera object'}, false);
+        }
+    });
 }

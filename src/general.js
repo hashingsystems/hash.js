@@ -56,17 +56,19 @@ export function getmodalContent() {
     '\t  \t</div>';
 }
 
+
+
 export function constructConfiguration(){
     return {
-        paymentserver: production ? "https://mps.hashingsystems.com" : 'http://localhost:9999',
-        extensionid: "ligpaondaabclfigagcifobaelemiena",
+        paymentserver: production ? Config.default.productionServer : 'http://localhost:8099',
+        extensionid: "dafkdmjifphnfjcajcbkhdjlkohanphh",
         error: "/no-extension",
         type: "article",
         time: Date.now(),
-        redirect: '{ "nonPayingAccount": "/insufficient-amount/", "noAccount": "/account-not-paired/", "homePage": "/"}',
-        submissionnode: "0.0.11",
+        redirect: '{ "nonPayingAccount": "/insufficient-amount/", "noAccount": "/account-not-paired/", "homePage": "/", "success:/success"}',
+        submissionnode: "0.0.3",
         memo: Date.now(),
-        recipientlist: '[{ "to": "0.0.99", "tinybars": "1666667" }]',
+        recipientlist: '[{ "to": "0.0.99", "tinybars": "200000" }]',
         contentid: '79',
         attrID: 'article-1',
         timestamp: timestamp,
