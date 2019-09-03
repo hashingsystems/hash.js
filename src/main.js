@@ -43,7 +43,7 @@ function app(window) {
     globalObject = Apis;
     globalObject.configurations = configurations;
 }
-app(window);
+//app(window);
 
 window.hash = function(params, callback){
     let queue = params;

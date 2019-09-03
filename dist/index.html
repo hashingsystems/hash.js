@@ -6,13 +6,14 @@
     <meta name="active-menu" content="Missing Chrome Extension">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    <link rel="stylesheet" href="http://api.hashingsystems.com/css/hash.css">
     <link rel="stylesheet" href="http://mps.hashingsystems.com/stylesheets/ext-style.css">
     <link rel="stylesheet" href="http://mps.hashingsystems.com/css/bootstrap.min.css">
     <link rel="stylesheet" href="http://mps.hashingsystems.com/css/style.css">
     <link rel="stylesheet" href="http://mps.hashingsystems.com/css/animate.min.css">
     <link href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700&display=swap" rel="stylesheet">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.0/jquery.min.js"></script>
-
+    <script src="widget.js"></script>
 </head>
 <body>
 
@@ -248,7 +249,7 @@
 </style>
 <script>
     // this is the library initializing. You can compile your own version of widget.js or use the one provided by us through api.hashingsystems.com/js/widget.js
-    (function (_h, a, s, h, g, ra, ph) {
+    /*(function (_h, a, s, h, g, ra, ph) {
         _h['HASH-JS'] = h;
         _h[h] = _h[h] || function () {
             (_h[h].q = _h[h].q || []).push(arguments)
@@ -261,7 +262,18 @@
         console.log(ra);
         console.log(ph);
         ph.parentNode.insertBefore(ra, ph);
-    }(window, document, 'script', 'mw', 'widget.js'));
+    }(window, document, 'script', 'mw', 'widget.js'));*/
+
+
+       /* (function() {
+            var s = document.createElement('script'); s.type = 'text/javascript';
+            s.async = true;
+            s.src = 'widget.js';
+            var x = document.getElementsByTagName('script')[0];
+            x.parentNode.insertBefore(s, x);
+        })();*/
+
+
 
     // this initializes a payment through the chrome extension.
     // Currently you can only have one recipient in the recipientlist
@@ -283,7 +295,8 @@
     // You can query up to 1MB of transactions.
     //mw('checkTransaction', {success: '/success/', failure: '/payment-failed/',memo:'1275,79', timeout: 3000,limit:5});
     var memo = Date.now();
-    mw('assist_transaction',{attrID:'hedera-object-append-div'}, function (err, res) {
+    window.hash(['assist_transaction',{attrID:'hedera-object-append-div'}],function(err, res){
+    //mw('assist_transaction',{attrID:'hedera-object-append-div'}, function (err, res) {
         let time = new Date(res.time),
             minutes = time.getMinutes(),
             hours = time.getHours() % 12,
@@ -310,6 +323,13 @@
                 jQuery('.msg_failed').show();
             }
             if(res.txn_success===false && !res.error && res.validBrowser === true){
+                jQuery('#heading').text('Transaction could not be made');
+                jQuery('#response-message').text(res.message);
+                jQuery('.card.animated.slideInDown').show();
+                jQuery('.msg_failed').show();
+            }
+
+            if(res.txn_success===false && !res.error && res.validBrowser === null){
                 jQuery('#heading').text('Transaction could not be made');
                 jQuery('#response-message').text(res.message);
                 jQuery('.card.animated.slideInDown').show();
