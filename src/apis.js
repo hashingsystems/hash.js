@@ -174,11 +174,14 @@ export function init(params, callback) {
 
 }
 
-export function getmodal() {
+export function getmodal(callback) {
     var myContent = general.getmodalContent();
     var myModal = new Modal({
         content: myContent
     });
+    if(callback && typeof callback==='function'){
+        callback(myContent);
+    }
     myModal.open();
 }
 
@@ -202,6 +205,7 @@ export function makeTransaction(configuration, callback) {
 }
 
 export function assist_transaction(configuration, callback) {
+    let params = configuration;
     let response = {
         accountPaired: false,
         ismobile: null,
@@ -230,7 +234,7 @@ export function assist_transaction(configuration, callback) {
                                 response.accountId = ajaxresp.response[0].sender;
                                 response.accountPaired = true;
                                 response.accessToAccounts = true;
-                                if (ajaxresp.response[0].nodeprecheck === 0) {
+                                if (parseInt(ajaxresp.response[0].nodeprecheck) === 0) {
                                     response.txn_success = true;
                                 }
                                 response.error = services.prechecker(ajaxresp.response[0].nodeprecheck);

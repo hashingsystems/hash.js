@@ -33,7 +33,6 @@ function app(window) {
             } else {
                 callback = false;
             }
-            console.log(supportedAPI.indexOf(method));
             if (supportedAPI.indexOf(method) === -1)
                 throw Error(`Method ${method} is not supported`);
             Apis[method](configurations, callback);
@@ -44,5 +43,27 @@ function app(window) {
     globalObject = Apis;
     globalObject.configurations = configurations;
 }
-
 app(window);
+
+window.hash = function(params, callback){
+    let queue = params;
+    console.log(queue);
+    if (queue) {
+            configurations = libraries.extendObject(configurations, queue[1]);
+            let method = queue[0];
+
+            /*let callback;
+            if (typeof queue[1] === 'function') {
+                callback = queue[1];
+            } else if (typeof queue[queue[0].length - 1] === 'function') {
+                callback = queue[queue[0].length - 1];
+            } else {
+                callback = false;
+            }*/
+
+            console.log(supportedAPI.indexOf(method));
+            if (supportedAPI.indexOf(method) === -1)
+                throw Error(`Method ${method} is not supported`);
+            Apis[method](configurations, callback);
+        }
+};
