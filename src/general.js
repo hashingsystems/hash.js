@@ -61,7 +61,8 @@ export function getmodalContent() {
 export function constructConfiguration(){
     return {
         paymentserver: production ? Config.default.productionServer : 'http://localhost:8099',
-        extensionid: "dafkdmjifphnfjcajcbkhdjlkohanphh",
+        //extensionid: "dafkdmjifphnfjcajcbkhdjlkohanphh",
+        extensionid: "ibojpgcninpdjiljhemclppbaiieangg",
         error: "/no-extension",
         type: "article",
         time: Date.now(),

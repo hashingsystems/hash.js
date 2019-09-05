@@ -1,5 +1,5 @@
 const config = {
-    production: true,
+    production: false,
     productionServer: 'https://mps.hashingsystems.com'
 };
 

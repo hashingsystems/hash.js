@@ -21,26 +21,13 @@ Make sure you sign up on portal.hedera.com and download the Hedera Wallet Chrome
 In order to make payments from your domain you will also have to set up automatic payment values or you will get an “insufficient-amount” error.
 
 ### Web Testing:
-Copy and paste the code below to your website.
+Copy and paste the script below in html head tag.
 
 ```
-<script> 
-(function(_h, a, s, h, g, ra, ph) { 
-    _h['HASH-JS'] = h;
-    _h[h] = _h[h] || function() {
-        (_h[h].q = _h[h].q || []).push(arguments) }; ra = a.createElement(s), 
-            ph = a.getElementsByTagName(s)[0]; 
-        ra.id = h; 
-        ra.src = g; 
-        ra.async = 1; 
-        console.log(ra); 
-        console.log(ph); 
-        ph.parentNode.insertBefore(ra, ph); 
-    }(window, document, 'script', 'mw', 'https://api.hashingsystems.com/js/widget.js')); 
-</script>
+<script src="https://api.hashingsystems.com/js/widget.js"></script>
 ```
 
-First, the code above must be inserted into your html code. You can use our hosted widget.js file or compile it yourself.
+You can use our hosted CDN or compile it yourself and use it.
 
 ### How To Compile It Yourself:
 
@@ -52,20 +39,22 @@ Once the code above is implemented, you can go ahead and make transactions, give
 
 ### Make a payment:
 ```
-mw('makepayment', { 
-    submissionnode: "0.0.11", 
-    recipientlist: '[{ "to": "0.0.99", "tinybars": "4666667" }]', 
-    contentid: '79', 
-    type: 'article', 
-    memo: '1275,79', 
-    attrID: 'feature-4', });
+window.hash(['makepayment',{
+                               submissionnode: "0.0.11", 
+                               recipientlist: '[{ "to": "0.0.99", "tinybars": "4666667" }]', 
+                               contentid: '79', 
+                               type: 'article', 
+                               memo: '1275,79', 
+                               attrID: 'feature-4', }],function(err, res){
+                                   // your code goes here
+                               });
 ```
 
 This makepaymentializes a payment through the Chrome extension. Currently there can only be one recipient in recipientlist. Take note of the memo used so you can verify the payment later.
 
 ### Check a Transaction:
 ```
-mw(‘checkTransaction’, { memo_id: ‘1275,70’ }, function(err, data) {
+window.hash([‘checkTransaction’, { memo_id: ‘1275,70’ }], function(err, data) {
 	if (err) {
 		console.log(err);
 	} else {
@@ -111,7 +100,7 @@ Response:
 * `message` (response message) String: Corresponding message to error or success
 
 ```
-mw('init',{args}, function(err, res){
+window.hash(['init',{args}], function(err, res){
   if(err){
      console.log(err);
   }else{
@@ -178,7 +167,7 @@ Steps includes:
 * Is Hbar loaded in
 
 ```
-mw('getmodal', function(err, res){
+window.hash(['getmodal'], function(err, res){
     if(err){
        console.log(err);
     }else{
