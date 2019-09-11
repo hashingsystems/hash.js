@@ -62,7 +62,7 @@ window.hash = function(params, callback){
             }*/
 
             console.log(supportedAPI.indexOf(method));
-            if (supportedAPI.indexOf(method) === -1)
+            if (supportedAPI.indexOf(method.toLowerCase()) === -1)
                 throw Error(`Method ${method} is not supported`);
             Apis[method](configurations, callback);
         }

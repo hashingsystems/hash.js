@@ -23,35 +23,19 @@ export function createHederaObject(params, callback) {
 }
 
 export function createContractObject(params, callback) {
-    let __construct = ['contractid', 'maximum', 'paymentserver', 'params', 'memo', 'abi', 'redirect', 'extensionid'];
+    let __construct = ['contractid', 'memo', 'paymentserver', 'params', 'abi', 'abi', 'extensionid'];
     let object = {
-        contractid: '0.0.1111',
-        maximum: '422342343',
-        paymentserver: params.paymentserver,
-        params: ["869", "100000000", "216", "253", "27", "0x226b08976ad0dd982aeb6b21a44f3eacae579569c34e71725aff801a2fe68739", "0x333f991fa3a870575f819569e9f72a771ea790078d448cc8789120ee14abf3c5"],
+        contractid: '0.0.15065',
         memo: 'a4a7c4329aab4b1fac474ff6f93d858c',
-        abi: JSON.stringify({
-            "constant": false,
-            "inputs": [{"name": "propertyID", "type": "uint24"}, {"name": "amount", "type": "uint256"}, {
-                "name": "x",
-                "type": "uint16"
-            }, {"name": "y", "type": "uint16"}, {"name": "v", "type": "uint8"}, {
-                "name": "r",
-                "type": "bytes32"
-            }, {"name": "s", "type": "bytes32"}],
-            "name": "buyProperty",
-            "outputs": [{"name": "", "type": "string"}],
-            "payable": true,
-            "stateMutability": "payable",
-            "type": "function"
-        }),
-        redirect: '{"nonPayingAccount": "/insufficient-amount/","noAccount": "/account-not-paired","homePage": "/"}',
-        extensionid: 'pdjjpcolgmmcifijpejkenpbbimedpic',
+        params: '["pablo"]',
+        abi: JSON.stringify({"constant":false,"inputs":[{"name": "domainName","type": "string"}],"name": "lookup","outputs": [{"name": "domain","type": "string"}],"payable": false,"stateMutability": "nonpayable","type": "function"}),
+        //redirect: '{"nonPayingAccount": "/insufficient-amount/","noAccount": "/account-not-paired","homePage": "/"}',
+        extensionid: 'gpdnamplampjoelgkdenkfjdeinjonnj',
     };
 
-    console.log(JSON.parse(object.abi));
+    //console.log(JSON.parse(object.abi));
     let extended = libraries.extendObject(object, params);
-    console.log(extended);
+    //console.log(extended);
     let Contractobject = '<hedera-contract ';
     for (var i in __construct) {
         let node = __construct[i];
@@ -60,10 +44,12 @@ export function createContractObject(params, callback) {
         }
     }
     Contractobject += '></hedera-contract>';
-    console.log(Contractobject);
+    //console.log(Contractobject);
+    if(extended['attrID']){
+        var body = document.getElementById(extended['attrID']);
+        body.innerHTML += Contractobject;
+    }
 
-    var body = document.getElementById(extended['attrID']);
-    body.innerHTML += Contractobject;
     callback(null,Contractobject);
 }
 
