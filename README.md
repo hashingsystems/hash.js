@@ -116,8 +116,8 @@ It provides the stepwise notification from transaction state, processing to succ
 Demo is provided on https://mps.hashingsystems.com
 
 ##*usage*
-``
-  mw('assisttransaction',args, function(){
+```
+  window.hash(['assisttransaction',args], function(){
      if(err){
           console.log(err);
           // do your thing here
@@ -126,7 +126,7 @@ Demo is provided on https://mps.hashingsystems.com
           // you can see our demo ** site for more information
        }
   });
-`` 
+```
 
 ## mw makepayment(recipientlist, contentid, type, memo, time, attrID)
 Initializes a payment through the Chrome extension.
@@ -175,6 +175,33 @@ window.hash(['getmodal'], function(err, res){
     }
 });
 ```
+
+## hash createContractObject ( params, callback)
+Initializes a contract creation through the Chrome extension.
+Currently you can only have on recipient in the recipientlist.
+Make note of the memo used so you can verify the payment later.
+Checks all pre-requisites for performing the transaction
+Provides the response for transaction failure or success
+
+Arguments:
+* `contractid`: ID of the contract (optional)
+* `memo`: optional memo field, but to query a transaction you must set one and know it (optional)
+* `time`: optionable field (option)
+* `attrID`: HTML object that handles where the Hedera micropayment object is going to be inserted (mendatory)
+***
+
+```
+window.hash(['createContractObject',{args}], function(err, res){
+  if(err){
+     console.log(err);
+  }else{
+     // you will get the contract object in return, although it is already appended in html if you provide AttrId.
+     // you can use it as you want.
+     // you can perform the action in accordance to your need
+  }
+});
+```
+
 ## Browser
 You can learn more at [api.hashingsystems.com](https://api.hashingsystems.com/)
 

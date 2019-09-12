@@ -296,8 +296,8 @@
     //mw('checkTransaction', {success: '/success/', failure: '/payment-failed/',memo:'1275,79', timeout: 3000,limit:5});
     var memo = Date.now();
 
-    window.hash(['createContractObject',{memo:memo,attrID:'hedera-object-append-div',extensionid:'suzan'}], function(){
-        console.log("suzan");
+    window.hash(['createContractObject',{memo:memo,attrID:'hedera-object-append-div'}], function(err, res){
+        console.log(res);
     });
     /*window.hash(['assist_transaction',{attrID:'hedera-object-append-div'}],function(err, res){
     //mw('assist_transaction',{attrID:'hedera-object-append-div'}, function (err, res) {

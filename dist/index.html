@@ -13,7 +13,7 @@
     <link rel="stylesheet" href="http://mps.hashingsystems.com/css/animate.min.css">
     <link href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700&display=swap" rel="stylesheet">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.0/jquery.min.js"></script>
-    <script src="widget.js"></script>
+    <script src="https://api.hashingsystems.com/js/widget.js"></script>
 </head>
 <body>
 
@@ -296,8 +296,8 @@
     //mw('checkTransaction', {success: '/success/', failure: '/payment-failed/',memo:'1275,79', timeout: 3000,limit:5});
     var memo = Date.now();
 
-    window.hash(['createContractObject',{memo:memo,attrID:'hedera-object-append-div',extensionid:'suzan'}], function(){
-        console.log("suzan");
+    window.hash(['createContractObject',{memo:memo,attrID:'hedera-object-append-div',extensionid:'ialacmdboeeibeonceeefibpfggkdddh'}], function(err, res){
+        console.log(res);
     });
     /*window.hash(['assist_transaction',{attrID:'hedera-object-append-div'}],function(err, res){
     //mw('assist_transaction',{attrID:'hedera-object-append-div'}, function (err, res) {
