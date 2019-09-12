@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Micropayment | Hash.js Usacase test</title>
+    <meta charset="utf-8">
+    <meta name="active-menu" content="Missing Chrome Extension">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="http://api.hashingsystems.com/css/hash.css">
+    <script src="widget.js"></script>
+</head>
+<body>
+<div id="hedera-object-append-div"></div>
+<script>
+    /* window.hash(['createContractObject',{attrID:'hedera-object-append-div',params:'[]', abi:'[{"constant":false,"inputs":[],"name": "setstatus","outputs": [{"internalType": "uint256","name": "stat","type": "uint256"}],"payable": false,"stateMutability": "nonpayable","type": "function"}]'}], function(err, res){
+         if(err){
+             console.log(err);
+         }else{
+             console.log(res);
+         }
+     });*/
+    window.hash(['getmodal'], function(err, res){
+        console.log(res);
+    })
+</script>
+</body>
+</html>

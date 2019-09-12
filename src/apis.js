@@ -28,7 +28,8 @@ export function createContractObject(params, callback) {
         contractid: '0.0.15372',
         memo: 'a4a7c4329aab4b1fac474ff6f93d858c',
         params: '["pablo"]',
-        abi: JSON.stringify({"constant":false,"inputs":[{"name": "domainName","type": "string"}],"name": "lookup","outputs": [{"name": "domain","type": "string"}],"payable": false,"stateMutability": "nonpayable","type": "function"}),
+        abi: JSON.stringify([{"constant":false,"inputs":[{"name": "domainName","type": "string"}],"name": "lookup","outputs": [{"name": "domain","type": "string"}],"payable": false,"stateMutability": "nonpayable","type": "function"}]),
+        //abi: '[{"constant":false,"inputs":[],"name": "setstatus","outputs": [{"internalType": "uint256","name": "stat","type": "uint256"}],"payable": false,"stateMutability": "nonpayable","type": "function"}]',
         //redirect: '{"nonPayingAccount": "/insufficient-amount/","noAccount": "/account-not-paired","homePage": "/"}',
         extensionid: 'ialacmdboeeibeonceeefibpfggkdddh',
     };
