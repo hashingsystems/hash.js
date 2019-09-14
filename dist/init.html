@@ -13,7 +13,7 @@
     <link rel="stylesheet" href="http://mps.hashingsystems.com/css/animate.min.css">
     <link href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700&display=swap" rel="stylesheet">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.0/jquery.min.js"></script>
-    <script src="https://api.hashingsystems.com/js/widget.js"></script>
+    <script src="widget.js"></script>
 </head>
 <body>
 
@@ -250,14 +250,60 @@
 <script>
     var memo = Date.now();
     jQuery(document).ready(function(){
-        window.hash(['createContractObject',{attrID:'hedera-object-append-div',params:'[]',abi:'[{"constant":false,"inputs":[],"name": "setstatus","outputs": [{"internalType": "uint256","name": "stat","type": "uint256"}],"payable": false,"stateMutability": "nonpayable","type": "function"}]'}], function(err, res){
-            if(err){
-                console.log(err);
-            }else{
+        window.hash(['init',{attrID:'hedera-object-append-div', memo:memo}],function(err, res){
+            let time = new Date(res.time),
+                minutes = time.getMinutes(),
+                hours = time.getHours() % 12,
+                ampm = time.getHours() >= 12 ? 'pm' : 'am';
+
+            jQuery('.time_logo span').text(hours+':'+minutes+' '+ampm);
+            if (err) {
+
+            } else {
+                console.log("data");
                 console.log(res);
-                // you will get the contract object in return, although it is already appended in html if you provide AttrId.
-                // you can use it as you want.
-                // you can perform the action in accordance to your need
+                jQuery('.msc_processing .msg_loader img').attr('src','img/check_mark.png');
+
+                if(res.validBrowser===false){
+                    jQuery('#heading').text('Transaction could not be made');
+                    jQuery('#response-message').text('The browser is not chrome');
+                    jQuery('.card.animated.slideInDown').show();
+                    jQuery('.msg_failed').show();
+                }
+                if(res.extensionInstalled===false && res.validBrowser === true){
+                    jQuery('#heading').text('Transaction could not be made');
+                    jQuery('#response-message').text(res.message);
+                    jQuery('.card.animated.slideInDown').show();
+                    jQuery('.msg_failed').show();
+                }
+                if(res.txn_success===false && !res.error && res.validBrowser === true){
+                    jQuery('#heading').text('Transaction could not be made');
+                    jQuery('#response-message').text(res.message);
+                    jQuery('.card.animated.slideInDown').show();
+                    jQuery('.msg_failed').show();
+                }
+
+                if(res.txn_success===false && !res.error && res.validBrowser === null){
+                    jQuery('#heading').text('Transaction could not be made');
+                    jQuery('#response-message').text(res.message);
+                    jQuery('.card.animated.slideInDown').show();
+                    jQuery('.msg_failed').show();
+                }
+
+                if(res.error && res.validBrowser === true){
+                    jQuery('#heading').text(res.error);
+                    jQuery('.card.animated.slideInDown').show();
+                    jQuery('#response-message').text(res.message);
+                    jQuery('.msg_failed').show();
+                }
+
+                if(res.txn_success===true){
+                    jQuery('#heading').text("Transaction Successfull");
+                    jQuery('#response-message').text('Transaction performed successfully');
+                    jQuery('.card.animated.slideInDown').show();
+                    jQuery('#response-message').text(res.message);
+                    jQuery('.msg_success').show();
+                }
             }
         });
     })
