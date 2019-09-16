@@ -1,5 +1,3 @@
-
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -9,6 +7,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
     <link rel="stylesheet" href="http://mps.hashingsystems.com/stylesheets/ext-style.css">
+    <link rel="stylesheet" href="http://api.hashingsystems.com/css/hash.css">
     <link rel="stylesheet" href="http://mps.hashingsystems.com/css/bootstrap.min.css">
     <link rel="stylesheet" href="http://mps.hashingsystems.com/css/style.css">
     <link rel="stylesheet" href="http://mps.hashingsystems.com/css/animate.min.css">
@@ -19,6 +18,7 @@
 </head>
 <body>
 <div id="hedera-object-append-div"></div>
+
 <div class="container">
     <div class="wrapper mt-5">
         <div style="display: none;" class="card animated slideInDown">
@@ -34,49 +34,6 @@
                 </div>
             </div>
         </div>
-    </div>
-
-    <div class="message_box_wrap">
-
-        <div class="msg_inner_wrap_all">
-            <!-- transaction processing -->
-            <div class="msg_inner_wrap msc_processing msg_transaction_pocess_wrap animated delay-1s">
-                <div class="msg_ico msg_loader"><img src="img/ajax-loader.gif"></div>
-                <div style="height: 69px" class="main_txt_wrap">
-                    <h3>Transaction Processing</h3>
-                    <p>The transaction is being processed, please wait.</p>
-                </div>
-                <div class="time_logo">
-                    <span>11:59 am</span>
-                    <img src="img/logo.jpg">
-                </div>
-            </div>
-            <!-- transaction failed -->
-            <div style="display: none;" class="msg_inner_wrap msg_failed msg_transaction_pocess_wrap animated delay-3s">
-                <div class="msg_ico msg_loader"><a href="#"><img src="img/cross_mark.png"></a></div>
-                <div class="main_txt_wrap">
-                    <h3>Transaction Failed</h3>
-                    <p>Uh!, transaction you performed could not be completed successfully, please try again. Thanks</p>
-                </div>
-                <div class="time_logo">
-                    <span>11:59 am</span>
-                    <img src="img/logo.jpg">
-                </div>
-            </div>
-            <!-- transaction successful -->
-            <div style="display: none;" class="msg_inner_wrap msg_success msg_transaction_pocess_wrap animated delay-5s">
-                <div class="msg_ico msg_loader"><a href="#"><img src="img/check_mark.png"></a></div>
-                <div style="height: 69px" class="main_txt_wrap">
-                    <h3>Transaction Successful</h3>
-                    <p>Hurrry! transaction was made successfully.</p>
-                </div>
-                <div class="time_logo">
-                    <span>11:59 am</span>
-                    <img src="img/logo.jpg">
-                </div>
-            </div>
-        </div>
-
     </div>
 </div>
 
@@ -236,7 +193,7 @@
 
     var memo = Date.now();
     jQuery(document).ready(function(){
-        window.hash(['init',{attrID:'hedera-object-append-div', memo:memo}],function(err, res){
+        window.hash(['assist_transaction',{attrID:'hedera-object-append-div', memo:memo}],function(err, res){
             let time = new Date(res.time),
                 minutes = time.getMinutes(),
                 hours = time.getHours() % 12,
@@ -246,56 +203,7 @@
             if (err) {
 
             } else {
-                console.log("data");
-                console.log(res);
-                jQuery('.msc_processing .msg_loader img').attr('src','img/check_mark.png');
 
-                if(res.validBrowser===false){
-                    jQuery('#heading').text('Transaction could not be made');
-                    jQuery('#response-message').text('The browser is not chrome');
-                    jQuery('.card.animated.slideInDown').show();
-                    jQuery('.msc_processing').addClass("zoomOut");
-                    jQuery('.msg_failed').show();
-                }
-                if(res.extensionInstalled===false && res.validBrowser === true){
-                    jQuery('#heading').text('Transaction could not be made');
-                    jQuery('#response-message').text(res.message);
-                    jQuery('.card.animated.slideInDown').show();
-                    jQuery('.msc_processing').addClass("zoomOut");
-                    jQuery('.msg_failed').show();
-                }
-                if(res.txn_success===false && !res.error && res.validBrowser === true){
-                    jQuery('#heading').text('Transaction could not be made');
-                    jQuery('#response-message').text(res.message);
-                    jQuery('.card.animated.slideInDown').show();
-                    jQuery('.msc_processing').addClass("zoomOut");
-                    jQuery('.msg_failed').show();
-                }
-
-                if(res.txn_success===false && !res.error && res.validBrowser === null){
-                    jQuery('#heading').text('Transaction could not be made');
-                    jQuery('#response-message').text(res.message);
-                    jQuery('.card.animated.slideInDown').show();
-                    jQuery('.msc_processing').addClass("zoomOut");
-                    jQuery('.msg_failed').show();
-                }
-
-                if(res.error && res.validBrowser === true){
-                    jQuery('#heading').text(res.error);
-                    jQuery('.card.animated.slideInDown').show();
-                    jQuery('#response-message').text(res.message);
-                    jQuery('.msc_processing').addClass("zoomOut");
-                    jQuery('.msg_failed').show();
-                }
-
-                if(res.txn_success===true){
-                    jQuery('#heading').text("Transaction Successfull");
-                    jQuery('#response-message').text('Transaction performed successfully');
-                    jQuery('.card.animated.slideInDown').show();
-                    jQuery('#response-message').text(res.message);
-                    jQuery('.msc_processing').addClass("zoomOut");
-                    jQuery('.msg_success').show();
-                }
             }
         });
     });

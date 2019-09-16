@@ -10,6 +10,6 @@ export function methods() {
         'makepayment', 'makeTransaction', 'checktransaction', 'assist_transaction',
 
         //modal related methods
-        'getmodal'
+        'getmodal', 'notify'
     ];
 }

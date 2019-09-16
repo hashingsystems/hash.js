@@ -3,7 +3,8 @@ import {Modal} from './modal';
 import * as libraries from './libraries';
 import * as Config from './config';
 import * as services from './services';
-export function test(){
+
+export function test() {
     return 'ting';
 }
 
@@ -19,7 +20,7 @@ export function createHederaObject(params, callback) {
     Hederaobject += '></hedera-micropayment>';
     var body = document.getElementById(params['attrID']);
     body.innerHTML += Hederaobject;
-    callback(null,Hederaobject);
+    callback(null, Hederaobject);
 }
 
 export function createContractObject(params, callback) {
@@ -28,7 +29,15 @@ export function createContractObject(params, callback) {
         contractid: '0.0.15372',
         memo: 'a4a7c4329aab4b1fac474ff6f93d858c',
         params: '["pablo"]',
-        abi: JSON.stringify([{"constant":false,"inputs":[{"name": "domainName","type": "string"}],"name": "lookup","outputs": [{"name": "domain","type": "string"}],"payable": false,"stateMutability": "nonpayable","type": "function"}]),
+        abi: JSON.stringify([{
+            "constant": false,
+            "inputs": [{"name": "domainName", "type": "string"}],
+            "name": "lookup",
+            "outputs": [{"name": "domain", "type": "string"}],
+            "payable": false,
+            "stateMutability": "nonpayable",
+            "type": "function"
+        }]),
         //abi: '[{"constant":false,"inputs":[],"name": "setstatus","outputs": [{"internalType": "uint256","name": "stat","type": "uint256"}],"payable": false,"stateMutability": "nonpayable","type": "function"}]',
         //redirect: '{"nonPayingAccount": "/insufficient-amount/","noAccount": "/account-not-paired","homePage": "/"}',
         extensionid: 'ialacmdboeeibeonceeefibpfggkdddh',
@@ -46,12 +55,12 @@ export function createContractObject(params, callback) {
     }
     Contractobject += '></hedera-contract>';
     //console.log(Contractobject);
-    if(extended['attrID']){
+    if (extended['attrID']) {
         var body = document.getElementById(extended['attrID']);
         body.innerHTML += Contractobject;
     }
 
-    callback(null,Contractobject);
+    callback(null, Contractobject);
 }
 
 export function checkTransaction(params, callback) {
@@ -104,7 +113,7 @@ export function init(params, callback) {
         message: null
     };
     response.validBrowser = libraries.isChrome();
-    if(response.validBrowser===false)
+    if (response.validBrowser === false)
         response.message = "The browser is not chrome";
     response.ismobile = libraries.detectmob();
     libraries.detect(params.extensionid, function () {
@@ -113,8 +122,8 @@ export function init(params, callback) {
         callback(null, response);
     }, function () {
         response.extensionInstalled = true;
-        createHederaObject(params, function(err, hobject){
-            if(hobject){
+        createHederaObject(params, function (err, hobject) {
+            if (hobject) {
                 let url = Config.default.production ? Config.default.productionServer : 'http://localhost:8099';
                 URL = url + "/memo/" + params.memo;
                 setTimeout(function () {
@@ -131,7 +140,7 @@ export function init(params, callback) {
                                     response.accessToAccounts = true;
                                     if (parseInt(ajaxresp.response[0].nodeprecheck) === 0) {
                                         response.txn_success = true;
-                                    }else{
+                                    } else {
                                         response.error = services.prechecker(ajaxresp.response[0].nodeprecheck);
                                     }
                                     response.message = services.prechecker(ajaxresp.response[0].nodeprecheck);
@@ -151,7 +160,7 @@ export function init(params, callback) {
                     xhttp.open("GET", URL, true);
                     xhttp.send();
                 }, 5000);
-            }else{
+            } else {
                 response.message = "Hedera object could not be detected, please try again refreshing the page.";
                 callback(false, response);
             }
@@ -166,7 +175,7 @@ export function getmodal(callback) {
     var myModal = new Modal({
         content: myContent
     });
-    if(callback && typeof callback==='function'){
+    if (callback && typeof callback === 'function') {
         callback(myContent);
     }
     myModal.open();
@@ -178,12 +187,12 @@ export function makeTransaction(configuration, callback) {
         transaction_failed: false,
         transaction_success: false
     };
-    init(configuration, function(err, res){
-        if(err){
+    init(configuration, function (err, res) {
+        if (err) {
             console.log(err);
-        }else{
+        } else {
             console.log(res);
-            if(res){
+            if (res) {
                 callback(res);
             }
         }
@@ -192,6 +201,7 @@ export function makeTransaction(configuration, callback) {
 }
 
 export function assist_transaction(configuration, callback) {
+    libraries.notify({title:'Transaction Processing',description:'Transaction is being processed, please wait', img:'img/ajax-loader.gif', timestamp: true});
     let params = configuration;
     let response = {
         accountPaired: false,
@@ -205,8 +215,8 @@ export function assist_transaction(configuration, callback) {
         txn_success: false,
         time: configuration.time
     };
-    createHederaObject(params, function(err, hobject){
-        if(hobject){
+    createHederaObject(params, function (err, hobject) {
+        if (hobject) {
             let url = Config.default.production ? Config.default.productionServer : 'http://localhost:8099';
             URL = url + "/memo/" + params.memo;
             setTimeout(function () {
@@ -222,15 +232,17 @@ export function assist_transaction(configuration, callback) {
                                 response.accountPaired = true;
                                 response.accessToAccounts = true;
                                 if (parseInt(ajaxresp.response[0].nodeprecheck) === 0) {
+                                    libraries.notify({title:'Transaction Processed',description:'Transaction was made successfully', img:'img/check_mark.png', timestamp: true});
                                     response.txn_success = true;
                                 }
                                 response.error = services.prechecker(ajaxresp.response[0].nodeprecheck);
                                 callback(null, response);
                             } else {
-                                console.log(response);
+                                libraries.notify({title:'Transaction Failed',description:'Transaction could not be made, please try again later.', img:'img/cross_mark.png', timestamp: true});
                                 callback(null, response);
                             }
                         } else {
+                            libraries.notify({title:'Transaction Failed',description:'Transaction could not be made, please try again later.', img:'img/cross_mark.png', timestamp: true});
                             response.accountPaired = false;
                             response.accessToAccounts = false;
                             callback(null, response);
@@ -240,8 +252,43 @@ export function assist_transaction(configuration, callback) {
                 xhttp.open("GET", URL, true);
                 xhttp.send();
             }, 5000);
-        }else{
-            callback({'success':false,'message':'Could not create hedera object'}, false);
+        } else {
+            callback({'success': false, 'message': 'Could not create hedera object'}, false);
         }
     });
+}
+
+export function notify(params, callback) {
+    let element = document.getElementsByClassName('message_box_wrap');
+    console.log(element)
+    if (typeof element !== 'undfeined' && element.length > 0)
+        element[0].parentNode.removeChild(element[0]);
+    let time;
+    if (params.time) {
+        time = new Date(params.time)
+    } else {
+        time = new Date();
+    }
+    let minutes = time.getMinutes(),
+        hours = time.getHours() % 12,
+        ampm = time.getHours() >= 12 ? 'pm' : 'am';
+    let html = '<div class="message_box_wrap">\n' +
+        '\n' +
+        '    <div class="msg_inner_wrap_all">\n' +
+        '        <!-- transaction processing -->\n' +
+        '        <div class="msg_inner_wrap msc_processing msg_transaction_pocess_wrap animated delay-1s">\n' +
+        '            <div class="msg_ico msg_loader"><img src="' + params.img + '"></div>\n' +
+        '            <div style="height: 69px" class="main_txt_wrap">\n' +
+        '                <h3>' + params.title + '</h3>\n' +
+        '                <p>' + params.description + '</p>\n' +
+        '            </div>\n' +
+        '            <div class="time_logo">\n' +
+        '                <span>' + hours + ':' + minutes + ' ' + ampm + '</span>\n' +
+        '                <img src="img/logo.jpg">\n' +
+        '            </div>\n' +
+        '        </div>\n' +
+        '    </div>\n' +
+        '\n' +
+        '</div>';
+    callback(null, html);
 }
