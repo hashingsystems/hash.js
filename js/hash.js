@@ -10,7 +10,7 @@ let _resolve = null;
 let _reject = null;
 
 let paymentserver = 'https://mps.hashingsystems.com';
-let extensionid = 'ppcphoibgicedepnccfgakecfelmdngk';
+let extensionid = 'hdjnnemgikeoehneddegfcmkljenlean';
 
 hash.init = (data, cb) => {
     /*
@@ -38,7 +38,6 @@ hash.onboard = (data, cb) => {
         Their wallet is paired to the extension
         The wallet contains at least "minBalance" ins tinybar
     */
-    
 }
 
 hash.triggerCryptoTransfer = (data, cb) => {
@@ -51,7 +50,7 @@ hash.triggerCryptoTransfer = (data, cb) => {
     hederaTag.setAttribute("data-contentid",data.contentid || '');
     hederaTag.setAttribute("data-type", data.type || '');
     hederaTag.setAttribute("data-redirect", data.redirect || '');
-    hederaTag.setAttribute("data-extensionid",data.extensionid || extensionid);
+    hederaTag.setAttribute("data-extensionid",extensionid);
     hederaTag.setAttribute("data-recipientlist",data.recipientlist || '');
     contractDiv.appendChild(hederaTag);   
     if (cb) {
@@ -73,7 +72,7 @@ hash.triggerSmartContract = (data, cb) => {
     hederaTag.setAttribute("data-paymentserver",data.paymentserver || paymentserver);
     hederaTag.setAttribute("data-params",data.params || '');
     hederaTag.setAttribute("data-abi", data.abi || '');
-    hederaTag.setAttribute("data-extensionid",data.extensionid) || extensionid;
+    hederaTag.setAttribute("data-extensionid",extensionid);
     hederaTag.setAttribute("data-amount",data.amount || '');
     contractDiv.appendChild(hederaTag); 
     if (cb) {
