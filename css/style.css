@@ -1,0 +1,23 @@
+body {
+    margin: 0 auto;
+}
+
+.container {
+    margin: 100px auto;
+    align-items: center;
+    display: flex;
+    justify-content: center;
+}
+
+.contract {
+    display: flex;
+}
+
+input#contract-button, input#popup-button {
+    background: black;
+    color: white;
+    text-align: center;
+    cursor: pointer;
+    padding: 10px;
+    margin-right: 20px;
+}
