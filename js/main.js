@@ -53,4 +53,12 @@ document.addEventListener('DOMContentLoaded', () => {
 
     })
 
+    document.getElementById('account-button').addEventListener('click',(e) => {
+        e.preventDefault();
+
+        window.hash.triggerCheckBalance()
+        .then(res => console.log('Promise:::Resolve::', res))
+        .catch(err => console.log("Promise::Error::", err))
+    })
+
 });
