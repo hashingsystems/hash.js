@@ -11,7 +11,7 @@ Hash.js is an Open Source Project, see the Contributing section to find out what
 
 
 ## Important Notes for Existing Users
-V1.0 is based on new Composer for Hedera Hasphgraph functionality. The extension is available at the [chrome store](https://chrome.google.com/webstore/detail/composer-for-hedera-hashg/hdjnnemgikeoehneddegfcmkljenlean)
+V1.0 is based on new Composer for Hedera Hasphgraph. Injected automatically into window.hash. Extension is available at the [chrome store](https://chrome.google.com/webstore/detail/composer-for-hedera-hashg/hdjnnemgikeoehneddegfcmkljenlean)
 
 
 
