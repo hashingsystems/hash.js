@@ -34,8 +34,6 @@ You can use our hosted CDN or download it yourself and host it.
 
 ### Table of Contents
 
--   [extensionid][1]
-    -   [Examples][2]
 -   [extensionid][3]
     -   [Examples][4]
 -   [enable][5]
@@ -60,16 +58,6 @@ You can use our hosted CDN or download it yourself and host it.
     -   [Parameters][24]
     -   [Examples][25]
 
-## extensionid
-
-Get Started
-Include this script tag of hash.js in your website to use and benefit of the following functions
-
-### Examples
-
-```javascript
-<script src="https://cdn.hashingsystems.com/hash.js" type="text/javascript"></script>
-```
 
 ## extensionid
 
