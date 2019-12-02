@@ -102,7 +102,14 @@ Triggers a Cryptotransfer prompt from composer extension
 
 ### Parameters
 
--   `data`  
+-   `data` **[object][28]** An object containing
+    -   `data.contractid` **[string][26]** contract Id can be of account id type('0.0.1234') or domain name type ('mydomain.hh')
+    -   `data.memo` **[string][26]** short message specifying the purpose or message relating to the call
+    -   `data.extensionid` **[string][26]** (optional) - extension id of composer
+    -   `data.recipientlist` **[string][26]** to addresses of recipients as string of object
+    -   `data.contentid` **[string][26]** (optional)
+    -   `data.type` **[string][26]** (optional)
+    -   `data.redirect` **[string][26]** (optional)
 -   `cb` **[function][27]** 
 
 ### Examples
@@ -122,6 +129,7 @@ hash.triggerCryptoTransfer(data, (err,res)=>{
 
 Returns **[function][27]** callback
 
+
 ## triggerSmartContract
 
 Triggers a Smart Contract call prompt from composer extension
@@ -132,7 +140,7 @@ Triggers a Smart Contract call prompt from composer extension
     -   `data.contractid` **[string][26]** contract Id can be of account id type('0.0.1234') or domain name type ('mydomain.hh')
     -   `data.memo` **[string][26]** short message specifying the purpose or message relating to the call
     -   `data.params` **[string][26]** (optional) - string of Array which contains parameters of contract function to be executed
-    -   `data.abi-null` **[string][26]** string array of objects which contains details of contract function
+    -   `data.abi` **[string][26]** string array of objects which contains details of contract function
     -   `data.extensionid` **[string][26]** (optional) - extension id of composer
     -   `data.gasfee` **[number][29]** cost of transaction fee(tinybars) needed for call
     -   `data.transactionfee` **[number][29]** cost of transaction fee(tinybars) needed for call
@@ -166,7 +174,7 @@ Triggers a Smart Contract Deploy prompt from composer extension
     -   `data.fileid` **[string][26]** (alternative to bytecode) - id of the file if created already
     -   `data.memo` **[string][26]** short message specifying the purpose or message relating to the call
     -   `data.params` **[string][26]** (optional) - string of Array which contains parameters of contract function to be executed
-    -   `data.abi-null` **[string][26]** string array of objects which contains details of contract function
+    -   `data.abi` **[string][26]** string array of objects which contains details of contract function
     -   `data.bytecode` **[string][26]** (alternative to fileid) - low-level code version of actual file
     -   `data.extensionid` **[string][26]** (optional) - extension id of composer
     -   `data.gasfee` **[number][29]** cost of transaction fee(tinybars) needed for call
