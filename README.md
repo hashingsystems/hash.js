@@ -14,7 +14,6 @@ Hash.js is an Open Source Project, see the Contributing section to find out what
 V1.0 is based on new Composer for Hedera Hasphgraph. Injected automatically into window.hash. Extension is available at the [chrome store](https://chrome.google.com/webstore/detail/composer-for-hedera-hashg/hdjnnemgikeoehneddegfcmkljenlean)
 
 
-
 ## Installation
 ### What do you need to get started?
 Make sure you sign up on portal.hedera.com and download the Hedera Wallet Chrome Extension. Configure it with your own wallet and make sure it’s funded with HBAR.
@@ -53,19 +52,6 @@ You can test directly by pulling this repo. The main.js file contains testing fu
 -   [accountIdToEthAddress][23]
     -   [Parameters][24]
     -   [Examples][25]
-
-
-## extensionid
-
-Variable that gives id of extension when the composer extension is up and running
-
-### Examples
-
-```javascript
-console.log(extensionid);
-```
-
-Returns **[string][26]** "igptwehnsjcokfkansilfhgntepvjbojm"
 
 ## enable
 
