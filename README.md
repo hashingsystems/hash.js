@@ -29,8 +29,8 @@ You can test directly by pulling this repo. The main.js file contains testing fu
 
 ### Table of Contents
 
--   [extensionid][3]
-    -   [Examples][4]
+-   [extensionid][1]
+    -   [Examples][2]
 -   [enable][5]
     -   [Parameters][6]
     -   [Examples][7]
@@ -43,15 +43,21 @@ You can test directly by pulling this repo. The main.js file contains testing fu
 -   [deploySmartContract][14]
     -   [Parameters][15]
     -   [Examples][16]
--   [triggerCheckBalance][17]
+-   [triggerFileCreate][17]
     -   [Parameters][18]
     -   [Examples][19]
--   [ethAddressToAccountId][20]
+-   [triggerFileRetrieve][20]
     -   [Parameters][21]
     -   [Examples][22]
--   [accountIdToEthAddress][23]
+-   [triggerCheckBalance][23]
     -   [Parameters][24]
     -   [Examples][25]
+-   [ethAddressToAccountId][26]
+    -   [Parameters][27]
+    -   [Examples][28]
+-   [accountIdToEthAddress][29]
+    -   [Parameters][30]
+    -   [Examples][31]
 
 ## enable
 
@@ -180,7 +186,75 @@ hash.deploySmartContract(data, (err,res)=>{
 // tiggers smart contract deploy extension prompt
 ```
 
-Returns **[function][27]** callback
+Returns **[function][33]** callback
+
+## triggerFileCreate
+
+Stores a file and creates a corresponding fileId for the same
+
+### Parameters
+
+-   `data` **[object][34]** An object containing
+    -   `data.memo` **[string][32]** short message specifying the purpose or message relating to the call
+    -   `data.fileContent` **[string][32]** contents of the file
+    -   `data.fileSize-null` **[number][35]** size of file in bytes
+    -   `data.extensionid` **[string][32]** (optional) - extension id of composer
+    -   `data.transactionfee` **[number][35]** cost of transaction fee(tinybars) needed for call
+    -   `data.expirationTime` **[number][35]** (optional) expiry time of contract in milliseconds (optional, default `7890000000`)
+-   `cb` **[function][33]** 
+
+### Examples
+
+```javascript
+hash.triggerFileCreate(data, (err,res)=>{
+  if(err){
+      //error case
+      console.log('Error:::',err);
+  }else{
+      //success case
+      console.log('Success:::',res);
+  }
+});
+// tiggers create file extension prompt
+```
+
+Returns **[function][33]** callback
+
+## triggerFileRetrieve
+
+Retrieves a file(fileContents) corresponding to a fileId
+
+### Parameters
+
+-   `data` **[object][34]** An object containing
+    -   `data.memo` **[string][32]** short message specifying the purpose or message relating to the call
+    -   `data.fileid` **[string][32]** id of the file, to retrieve the fileContentses
+    -   `data.transactionfee` **[number][35]** cost of transaction fee(tinybars) needed for call
+-   `cb` **[function][33]** 
+
+### Examples
+
+```javascript
+hash.triggerFileRetrieve(data, (err,res)=>{
+  if(err){
+      //error case
+      console.log('Error:::',err);
+  }else{
+      //success case
+      //{
+      //   res:{
+      //          contents:{"0":84,"1":104,"2":105,"3":115,"4":32,"5":105,"6":115,"7":32,"8":97,"9":32,"10":116,"11":101,"12":115,"13":116,"14":32,"15":102,"16":105,"17":108,"18":101,"19":44,"20":32,"21":119,"22":104,"23":105,"24":99,"25":104,"26":32,"27":99,"28":111,"29":110,"30":116,"31":97,"32":105,"33":110,"34":115,"35":32,"36":115,"37":97,"38":109,"39":112,"40":108,"41":101,"42":32,"43":100,"44":97,"45":116,"46":97},
+      //          contentAsString:"This is a test file, which contains sample data",
+      //          walletAccount":"0.0.17210"
+      //      }
+      //}
+      console.log('Success:::',res);
+  }
+});
+// tiggers create file extension prompt
+```
+
+Returns **[function][33]** callback
 
 ## triggerCheckBalance
 
@@ -188,8 +262,8 @@ Checks balance of current account selected in composer extension or checks the b
 
 ### Parameters
 
--   `accountID` **[string][26]** account id in accountID format("0.0.12345")
--   `cb` **[function][27]** 
+-   `accountID` **[string][32]** account id in accountID format("0.0.12345")
+-   `cb` **[function][33]** 
 
 ### Examples
 
@@ -212,7 +286,7 @@ hash.triggerCheckBalance("0.0.12345", (err,res)=>{
 });
 ```
 
-Returns **[function][27]** callback
+Returns **[function][33]** callback
 
 ## ethAddressToAccountId
 
@@ -220,7 +294,7 @@ Converts hexadecimal eth address to account id type('0.0.1234')
 
 ### Parameters
 
--   `ethAddress` **[string][26]** an hexadecimal value
+-   `ethAddress` **[string][32]** an hexadecimal value
 
 ### Examples
 
@@ -236,7 +310,7 @@ Converts account id type('0.0.1234') to hexadecimal eth address
 ### Parameters
 
 -   `accountId`  
--   `ethAddress` **[string][26]** an hexadecimal value
+-   `ethAddress` **[string][32]** an hexadecimal value
 
 ### Examples
 
@@ -244,7 +318,8 @@ Converts account id type('0.0.1234') to hexadecimal eth address
 hash.accountIdToEthAddress("0.0.12345");
 ```
 
-Returns **[string][26]** "0000000000000000000000000000000000003039"
+Returns **[string][32]** "0000000000000000000000000000000000003039"
+
 
 [1]: #extensionid
 
@@ -278,31 +353,44 @@ Returns **[string][26]** "0000000000000000000000000000000000003039"
 
 [16]: #examples-5
 
-[17]: #triggercheckbalance
+[17]: #triggerfilecreate
 
 [18]: #parameters-4
 
 [19]: #examples-6
 
-[20]: #ethaddresstoaccountid
+[20]: #triggerfileretrieve
 
 [21]: #parameters-5
 
 [22]: #examples-7
 
-[23]: #accountidtoethaddress
+[23]: #triggercheckbalance
 
 [24]: #parameters-6
 
 [25]: #examples-8
 
-[26]: https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String
+[26]: #ethaddresstoaccountid
 
-[27]: https://developer.mozilla.org/docs/Web/JavaScript/Reference/Statements/function
+[27]: #parameters-7
 
-[28]: https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object
+[28]: #examples-9
 
-[29]: https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number
+[29]: #accountidtoethaddress
+
+[30]: #parameters-8
+
+[31]: #examples-10
+
+[32]: https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String
+
+[33]: https://developer.mozilla.org/docs/Web/JavaScript/Reference/Statements/function
+
+[34]: https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object
+
+[35]: https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number
+
 
 
 ## Browser
