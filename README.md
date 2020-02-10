@@ -11,6 +11,9 @@ Hash.js is an Open Source Project, see the Contributing section to find out what
 
 
 ## Important Notes for Existing Users
+
+V1.5.0 adds file create and retrieve. 
+
 V1.4.1 implements a few key fixes for smart contract developers. 
 
 Latest Extension is available at the [chrome store](https://chrome.google.com/webstore/detail/composer-for-hedera-hashg/hdjnnemgikeoehneddegfcmkljenlean)
