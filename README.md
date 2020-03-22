@@ -30,6 +30,12 @@ In order to make payments from your domain you will also have to set up automati
 
 You can test directly by pulling this repo. The main.js file contains testing functions you can work with.
 
+You can also copy and paste the script below in html head tag.
+
+```
+<script src="https://cdn.hashingsystems.com/hash.js"></script>
+```
+
 ### Table of Contents
 
 -   [extensionid][1]
