@@ -590,12 +590,6 @@ Returns **[string][45]** "0000000000000000000000000000000000003039"
 
 [48]: https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number
 
-
-
-## Browser
-You can learn more at [api.hashingsystems.com](https://api.hashingsystems.com/)
-
-
 ## Contributing
 You're welcome to contribute code on here. Fork and create a detailed pull request. 
 
