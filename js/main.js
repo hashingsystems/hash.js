@@ -43,7 +43,7 @@ document.addEventListener('DOMContentLoaded', () => {
         let data = {
             memo:"My First Hedera Transaction",
             contentid:'test1',
-            recipientlist:'[{"tokenId": "0.0.307448", "token": "1000000000", "to":"0.0.6036"}]'
+            recipientlist:'[{"tokenId": "0.0.307448", "token": "1000000000", "decimals":"8", "to":"0.0.6036"}]'
         }
 
         let transferToken = (cb) => {
