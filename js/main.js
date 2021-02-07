@@ -43,7 +43,7 @@ document.addEventListener('DOMContentLoaded', () => {
         let data = {
             memo:"My First Hedera Transaction",
             contentid:'test1',
-            recipientlist:'[{"tokenId": "0.0.1234", "token": "444", "to":"0.0.1107"}]'
+            recipientlist:'[{"tokenId": "0.0.307448", "token": "1000000000", "to":"0.0.6036"}]'
         }
 
         let transferToken = (cb) => {
@@ -103,7 +103,7 @@ document.addEventListener('DOMContentLoaded', () => {
         let connectToken = (cb) => {
             let contractDiv = document.getElementsByTagName('body')[0];
             let hederaTag = document.createElement("hedera-token-connect");
-            hederaTag.setAttribute("data-tokenid", '0.0.145669');
+            hederaTag.setAttribute("data-tokenid", '0.0.307448');
             hederaTag.setAttribute("data-host", window.location.host || '');
             hederaTag.setAttribute("data-extensionid", extensionid);
             contractDiv.appendChild(hederaTag);
