@@ -13,7 +13,7 @@ body {
     display: flex;
 }
 
-input#contract-button, input#popup-button, input#account-button {
+input#contract-button, input#popup-button, input#account-button, input#token-button, input#transfer-token-button {
     background: black;
     color: white;
     text-align: center;
